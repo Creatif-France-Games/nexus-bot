@@ -15,3 +15,6 @@ Ce bot Discord est conçu pour ajouter des commandes fun.
 ## Licence
 
 Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+## Qui ?
+Codé par Créatif France Games, corrigé par ChatGPT.
