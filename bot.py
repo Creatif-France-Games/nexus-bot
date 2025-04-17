@@ -59,19 +59,22 @@ COMPLIMENTS = [
     "{member.display_name}, t'es une personne vraiment cool et positive ! 😎"
 ]
 
-# Commande /wikipedia
-@bot.tree.command(name='wikipedia', description='Cherche un article sur Wikipedia.')
-async def wikipedia_command(interaction: discord.Interaction, search: str):
-    """Commande Slash pour chercher un article sur Wikipedia"""
-    try:
-        result = wikipedia.summary(search, sentences=1)  # Limite à 1 phrase
-        await interaction.response.send_message(result)
-    except wikipedia.exceptions.DisambiguationError as e:
-        await interaction.response.send_message(f"Plusieurs résultats trouvés, tu peux préciser ta recherche : {e.options}")
-    except wikipedia.exceptions.HTTPTimeoutError:
-        await interaction.response.send_message("Une erreur de connexion est survenue, réessaie plus tard.")
-    except Exception as e:
-        await interaction.response.send_message(f"Une erreur est survenue: {str(e)}")
+#Commande /wikipedia
+@bot.tree.command(name='wikipedia', description='Fais une recherche sur Wikipédia.')
+async def wikipedia(interaction: discord.Interaction, recherche: str):
+    wiki = wikipediaapi.Wikipedia('fr')  # ou 'en' pour anglais
+
+    page = wiki.page(recherche)
+
+    if not page.exists():
+        await interaction.response.send_message(f"Aucune page trouvée pour : **{recherche}**", ephemeral=True)
+        return
+
+    extrait = page.summary[0:1000]  # Coupe à 1000 caractères max
+    url = page.fullurl
+
+    await interaction.response.send_message(f"**{page.title}**\n{extrait}...\n[Lire plus ici]({url})")
+
 
 # Commande Slash pour lancer un dé
 @bot.tree.command(name='de', description='Lance un dé avec un nombre de faces de ton choix.')
