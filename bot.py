@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import asyncio
 from discord import ui
 from discord import app_commands
-import wikipedia  # Ajout de la bibliothèque Wikipedia
+import wikipediaapi  # Ajout de la bibliothèque Wikipedia
 
 # Initialisation de Flask
 app = Flask('')
