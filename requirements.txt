@@ -2,3 +2,4 @@ discord.py
 flask
 python-dotenv
 wikipedia-api
+requests
