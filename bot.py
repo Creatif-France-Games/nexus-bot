@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 import asyncio
 from discord import ui
 from discord import app_commands
+import wikipedia  # Ajout de la bibliothèque Wikipedia
 
 # Initialisation de Flask
 app = Flask('')
@@ -58,32 +59,53 @@ COMPLIMENTS = [
     "{member.display_name}, t'es une personne vraiment cool et positive ! 😎"
 ]
 
+# Commande /wikipedia
+@bot.tree.command(name='wikipedia', description='Cherche un article sur Wikipedia.')
+async def wikipedia_command(interaction: discord.Interaction, search: str):
+    """Commande Slash pour chercher un article sur Wikipedia"""
+    try:
+        result = wikipedia.summary(search, sentences=1)  # Limite à 1 phrase
+        await interaction.response.send_message(result)
+    except wikipedia.exceptions.DisambiguationError as e:
+        await interaction.response.send_message(f"Plusieurs résultats trouvés, tu peux préciser ta recherche : {e.options}")
+    except wikipedia.exceptions.HTTPTimeoutError:
+        await interaction.response.send_message("Une erreur de connexion est survenue, réessaie plus tard.")
+    except Exception as e:
+        await interaction.response.send_message(f"Une erreur est survenue: {str(e)}")
+
+# Commande Slash pour lancer un dé
 @bot.tree.command(name='de', description='Lance un dé avec un nombre de faces de ton choix.')
 async def de(interaction: discord.Interaction, faces: int = 6):
-    """Commande Slash pour lancer un dé"""
     roll_result = random.randint(1, faces)
     await interaction.response.send_message(f"Tu as lancé un dé à {faces} faces et tu as obtenu : {roll_result}")
 
+# Commande Slash pour dire une blague
 @bot.tree.command(name='blague', description='Dis une blague drôle.')
 async def blague(interaction: discord.Interaction):
-    """Commande Slash pour donner une blague"""
     joke = random.choice(BLAGUES)
     await interaction.response.send_message(joke)
 
+# Commande Slash pour changer le statut du bot
 @bot.tree.command(name='statusbot', description='Change le statut du bot avec un message personnalisé.')
 async def statusbot(interaction: discord.Interaction, statut: str):
-    """Commande Slash pour changer le statut du bot"""
     activity = discord.Game(name=statut)
     await bot.change_presence(activity=activity)
     await interaction.response.send_message(f"Le statut du bot a été changé en : {statut}")
 
-@bot.tree.command(name='compliment', description='Envoie un compliment à quelqu\'un !')
+# Commande Slash pour envoyer un compliment
+@bot.tree.command(name='compliment', description='Envoie un compliment à un utilisateur !')
 async def compliment(interaction: discord.Interaction, member: discord.Member = None):
-    """Commande Slash pour donner un compliment à un utilisateur"""
-    member = member or interaction.user  # Si personne n'est mentionné, donner un compliment à l'utilisateur qui a envoyé la commande.
+    member = member or interaction.user
     compliment_message = random.choice(COMPLIMENTS).format(member=member)
     await interaction.response.send_message(compliment_message)
 
+# Commande Slash pour afficher la latence
+@bot.tree.command(name="ping", description="Affiche la latence du bot.")
+async def ping(interaction: discord.Interaction):
+    latency = round(bot.latency * 1000)  # En ms
+    await interaction.response.send_message(f"Pong ! Latence : `{latency}ms`")
+
+# Code déjà initialisé pour la gestion des messages
 @bot.event
 async def on_message(message):
     if message.author.bot:
@@ -104,6 +126,7 @@ async def on_message(message):
     
     await bot.process_commands(message)
 
+# Code pour envoyer une news (fonctionnel avec permissions administrateur)
 @bot.tree.command(name="envoyer_news", description="Envoyer une news dans le salon annonces")
 @app_commands.checks.has_permissions(administrator=True)
 async def envoyer_news(interaction: discord.Interaction):
@@ -140,13 +163,9 @@ async def envoyer_news(interaction: discord.Interaction):
     except asyncio.TimeoutError:
         await interaction.followup.send("Temps écoulé, veuillez recommencer la commande.", ephemeral=True)
 
-@bot.tree.command(name="ping", description="Affiche la latence du bot.")
-async def ping(interaction: discord.Interaction):
-    latency = round(bot.latency * 1000)  # En ms
-    await interaction.response.send_message(f"Pong ! Latence : `{latency}ms`")
-
-# Code déjà initialisé
+# Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
 
 # Lancer le bot Discord
 bot.run(os.getenv('DISCORD_TOKEN'))
+
