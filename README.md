@@ -1,20 +1,27 @@
-# CF Games Bot
+# CF Games Bot 🎮🤖
 
-Ce bot Discord est conçu pour ajouter des commandes fun.
+Bienvenue sur le CF Games Bot, ton compagnon idéal pour des commandes fun sur ton serveur Discord ! 🚀
 
-## Installation
+## Installation rapide ⚡
 
-1. Clonez ce dépôt : `git clone https://github.com/Creatif-France-Games/cf-games-bot.git`
-2. Installez les dépendances avec : `pip install -r requirements.txt`
+1. Clone ce dépôt avec la commande :  
+   `git clone https://github.com/Creatif-France-Games/cf-games-bot.git`
+   
+2. Installe les dépendances avec :  
+   `pip install -r requirements.txt`
 
-## Lancer le bot
+## Lancer le bot 🚀
 
-1. Assurez-vous que vous avez configuré la variable d'environnement `DISCORD_TOKEN`.
-2. Exécutez le bot avec : `python bot.py`
+1. Assure-toi que ta variable d'environnement `DISCORD_TOKEN` est bien configurée.  
+2. Lancer le bot avec :  
+   `python bot.py`
 
-## Licence
+Et voilà, ce bot est prêt à faire sa magie ! ✨
 
-Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+## Licence 📜
 
-## Qui ?
-Codé par Créatif France Games, corrigé par ChatGPT.
+Ce projet est sous licence MIT. Tu peux consulter le fichier [LICENSE](LICENSE) pour plus de détails.
+
+## Qui a fait ça ? 👨‍💻👩‍💻
+
+Créé par Créatif France Games, corrigé et amélioré avec amour (et un peu d'aide de ChatGPT). 😎
