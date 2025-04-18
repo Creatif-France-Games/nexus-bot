@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import asyncio
 from discord import ui
 from discord import app_commands
-import wikipediaapi  # Ajout de la bibliothèque Wikipedia
+import wikipediaapi
 
 # Initialisation de Flask
 app = Flask('')
@@ -40,15 +40,6 @@ async def on_ready():
 CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')  # Utilisez une variable d'environnement
 ROLE_NOTIFS_ID = os.getenv('ROLE_NOTIFS_ID')  # Utilisez une variable d'environnement
 
-# Liste des blagues
-BLAGUES = [
-    "Pourquoi les plongeurs plongent-ils toujours en arrière et jamais en avant ? Parce que sinon ils tombent toujours dans le bateau.",
-    "Pourquoi les poissons détestent-ils l'ordinateur ? Parce qu'ils ont peur du net.",
-    "Quel est le comble pour un électricien ? De ne pas être au courant.",
-    "Pourquoi les squelettes n’aiment-ils pas se battre ? Parce qu’ils n’ont pas de tripes.",
-    "Quel est le comble pour un électricien ? De ne pas être au courant.",
-    "Pourquoi les plongeurs plongent-ils toujours en arrière ? Parce que sinon ils tombent toujours dans le bateau."
-]
 
 # Liste des compliments
 COMPLIMENTS = [
@@ -63,7 +54,7 @@ COMPLIMENTS = [
     "{member.display_name}, t'es une personne vraiment cool et positive ! 😎"
 ]
 
-#Commande /wikipedia
+#Commande /wikipedia (en test, marche pas trop je crois)
 @bot.tree.command(name='wikipedia', description='Fais une recherche sur Wikipédia.')
 async def wikipedia(interaction: discord.Interaction, recherche: str):
     wiki = wikipediaapi.Wikipedia('fr')  # ou 'en' pour anglais
@@ -86,11 +77,18 @@ async def de(interaction: discord.Interaction, faces: int = 6):
     roll_result = random.randint(1, faces)
     await interaction.response.send_message(f"Tu as lancé un dé à {faces} faces et tu as obtenu : {roll_result}")
 
+# Lire les blagues depuis le blagues.txt
+def lire_blagues():
+    with open('blagues.txt', 'r') as f:
+        blagues = f.readlines()
+    return [blague.strip() for blague in blagues]
+
 # Commande Slash pour dire une blague
 @bot.tree.command(name='blague', description='Dis une blague drôle.')
 async def blague(interaction: discord.Interaction):
-    joke = random.choice(BLAGUES)
-    await interaction.response.send_message(joke)
+    blagues = lire_blagues()  # Lit la blague
+    joke = random.choice(blagues)  # Choisir aléatoiremetn
+    await interaction.response.send_message(joke)  # Envoie la blague
 
 # Commande Slash pour changer le statut du bot
 @bot.tree.command(name='statusbot', description='Change le statut du bot avec un message personnalisé.')
