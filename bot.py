@@ -120,17 +120,11 @@ async def on_message(message):
 
     content = message.content.lower()
 
- @bot.event
-async def on_message(message):
-    if message.author.bot:
-        return
-
-    content = message.content.lower()
-
     salutations = ["salut", "bonjour", "coucou", "hi", "hola", "hello", "yo", "bonsoir"]
     depart = ["au revoir", "bye", "a+", "ciao", "see ya", "à bientôt", "adieu", "bonne nuit", "bn", "tchao"]
     faim = ["j'ai faim", "faim", "j’ai la dalle", "je crève de faim", "trop faim", "je crève la dalle"]
     quoifeur = ["quoi"]
+
 
     if any(word in content for word in salutations):
         await message.reply(f"Salut {message.author.mention} !")
