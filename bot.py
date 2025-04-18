@@ -120,9 +120,10 @@ async def on_message(message):
 
     content = message.content.lower()
 
-    salutations = ["salut", "bonjour", "coucou", "hi", "hola", "hello", "yo", "re", "bonsoir"]
+    salutations = ["salut", "bonjour", "coucou", "hi", "hola", "hello", "yo", "bonsoir"]
     depart = ["au revoir", "bye", "a+", "ciao", "see ya", "à bientôt", "adieu", "bonne nuit", "bn", "tchao"]
-    faim = ["j'ai faim", "faim", "j’ai la dalle", "je crève de faim", "trop faim"]
+    faim = ["j'ai faim", "faim", "j’ai la dalle", "je crève de faim", "trop faim", "je crève la dalle"]
+    quoifeur = ["quoi"]
 
     if any(word in content for word in salutations):
         await message.reply(f"Salut {message.author.mention} !")
@@ -130,7 +131,9 @@ async def on_message(message):
         await message.reply(f"Bye {message.author.mention} !")
     elif any(word in content for word in faim):
         await message.reply("Tiens une bonne assiette de pâtes carbonara :\nhttps://cdn.pixabay.com/photo/2011/04/29/11/20/spaghetti-7113_1280.jpg")
-    
+    elif any(word in content for word in quoi):
+        await message.reply(f"Feur !")
+        
     await bot.process_commands(message)
 
 # Code pour envoyer une news (fonctionnel avec permissions administrateur)
