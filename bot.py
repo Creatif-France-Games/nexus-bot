@@ -9,6 +9,8 @@ import asyncio
 from discord import ui
 from discord import app_commands
 import wikipediaapi
+from discord.app_commands import MissingPermissions
+from discord.ui import View, Button
 
 # Initialisation de Flask
 app = Flask('')
@@ -149,42 +151,84 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
-# Code pour envoyer une news (fonctionnel avec permissions administrateur)
+# Définition de la classe ConfirmationView
+class ConfirmationView(View):
+    def __init__(self, user, content):
+        super().__init__()
+        self.user = user
+        self.content = content
+        self.confirmed = False
+
+    @discord.ui.button(label="Confirmer", style=discord.ButtonStyle.green)
+    async def confirm(self, interaction: discord.Interaction, button: Button):
+        if interaction.user.id == self.user.id:
+            self.confirmed = True
+            self.stop()
+        else:
+            await interaction.response.send_message("Vous ne pouvez pas interagir avec cette confirmation.", ephemeral=True)
+
+    @discord.ui.button(label="Annuler", style=discord.ButtonStyle.red)
+    async def cancel(self, interaction: discord.Interaction, button: Button):
+        if interaction.user.id == self.user.id:
+            self.confirmed = False
+            self.stop()
+        else:
+            await interaction.response.send_message("Vous ne pouvez pas interagir avec cette confirmation.", ephemeral=True)
+
+# Commande Slash pour envoyer une news
 @bot.tree.command(name="envoyer_news", description="Envoyer une news dans le salon annonces")
 @app_commands.checks.has_permissions(administrator=True)
 async def envoyer_news(interaction: discord.Interaction):
-    await interaction.response.send_message("Que souhaitez-vous inclure ?", ephemeral=True)
+    await interaction.response.defer(ephemeral=True)  # Réponse différée pour éviter les erreurs de délai
+    await interaction.followup.send("Que souhaitez-vous inclure ?", ephemeral=True)
 
     def check(m):
         return m.author.id == interaction.user.id and m.channel.id == interaction.channel.id
 
     try:
+        # Attente de la réponse de l'utilisateur
         msg = await bot.wait_for("message", check=check, timeout=60)
 
+        # Création de la vue de confirmation
         view = ConfirmationView(interaction.user, msg.content)
-        await interaction.followup.send("Clique pour confirmer ou annuler :", view=view, ephemeral=True)
+        await interaction.followup.send("Cliquez pour confirmer ou annuler :", view=view, ephemeral=True)
 
+        # Attente de l'interaction avec la vue
         await view.wait()
 
         if view.confirmed:
-            salon = bot.get_channel(CHANNEL_ANNONCES_ID)
-            role = interaction.guild.get_role(ROLE_NOTIFS_ID)
+            # Récupération du salon et du rôle
+            salon = bot.get_channel(int(os.getenv('CHANNEL_ANNONCES_ID')))
+            role = interaction.guild.get_role(int(os.getenv('ROLE_NOTIFS_ID')))
 
-            if salon and role:
-                embed = discord.Embed(
-                    title="NEWS",
-                    description=msg.content,
-                    color=discord.Color.from_rgb(88, 101, 242)
-                )
-                await salon.send(f"{role.mention}", embed=embed)
-                await interaction.followup.send("News envoyée !", ephemeral=True)
-            else:
-                await interaction.followup.send("Erreur : salon ou rôle introuvable.", ephemeral=True)
+            if not salon:
+                await interaction.followup.send("Erreur : le salon des annonces est introuvable.", ephemeral=True)
+                return
+            if not role:
+                await interaction.followup.send("Erreur : le rôle pour les notifications est introuvable.", ephemeral=True)
+                return
+
+            # Création et envoi de l'embed
+            embed = discord.Embed(
+                title="NEWS",
+                description=msg.content,
+                color=discord.Color.from_rgb(88, 101, 242)
+            )
+            await salon.send(f"{role.mention}", embed=embed)
+            await interaction.followup.send("News envoyée !", ephemeral=True)
         else:
             await interaction.followup.send("Envoi annulé.", ephemeral=True)
 
     except asyncio.TimeoutError:
         await interaction.followup.send("Temps écoulé, veuillez recommencer la commande.", ephemeral=True)
+
+# Gestion des erreurs de permissions
+@envoyer_news.error
+async def envoyer_news_error(interaction: discord.Interaction, error):
+    if isinstance(error, MissingPermissions):
+        await interaction.response.send_message(
+            "Vous devez être administrateur pour utiliser cette commande.", ephemeral=True
+        )
 
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
