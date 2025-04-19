@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import asyncio
 from discord import ui
 from discord import app_commands
-import wikipediaapi
+import wikipedia-api
 from discord.app_commands import MissingPermissions
 from discord.ui import View, Button
 
@@ -60,7 +60,7 @@ COMPLIMENTS = [
 @bot.tree.command(name='wikipedia', description='Fais une recherche sur Wikipédia.')
 async def wikipedia(interaction: discord.Interaction, recherche: str):
     recherche = recherche.strip()  # Nettoyer l'entrée utilisateur
-    wiki = wikipediaapi.Wikipedia('fr')  # ou 'en' pour l'anglais
+    wiki = wikipedia-api.Wikipedia('fr')  # ou 'en' pour l'anglais
 
     page = wiki.page(recherche)
 
