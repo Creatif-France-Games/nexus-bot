@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import asyncio
 from discord import ui
 from discord import app_commands
-import wikipedia-api
+import wikipediaapi
 from discord.app_commands import MissingPermissions
 from discord.ui import View, Button
 
