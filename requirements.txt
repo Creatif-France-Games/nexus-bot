@@ -1,6 +1,5 @@
 discord.py
 flask
 python-dotenv
-wikipediaapi
 wikipedia-api
 requests
