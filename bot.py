@@ -133,6 +133,7 @@ async def on_message(message):
     depart = ["au revoir", "bye", "a+", "ciao", "see ya", "à bientôt", "adieu", "bonne nuit", "bn", "tchao"]
     faim = ["j'ai faim", "faim", "j’ai la dalle", "je crève de faim", "trop faim", "je crève la dalle"]
     quoifeur = ["quoi"]
+    cava = ["ca va?", "cv?", "ça va ?", "bien ou bien"]
 
 
     if any(word in content for word in salutations):
@@ -146,6 +147,9 @@ async def on_message(message):
         return
     elif any(word in content for word in quoifeur):
         await message.reply("Feur !")
+        return
+    elif any(word in content for word in cava):
+        await message.reply("Moi je vait bien, comme toujours ! Et toi?")
         return
 
     await bot.process_commands(message)
