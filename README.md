@@ -24,4 +24,11 @@ Ce projet est sous licence MIT. Tu peux consulter le fichier [LICENSE](LICENSE) 
 
 ## Qui a fait ça ? 👨‍💻👩‍💻
 
-Créé par Créatif France Games, corrigé et amélioré avec amour (et un peu d'aide de ChatGPT). 😎
+Créé par Créatif France Games et ChatGPT, corrigé et amélioré avec amour. 100% transparent, j'ai utilisé l'IA. 😎
+ 
+# FAQ 
+
+## Puis-je l'installer sur mon serveur ?
+Oui, mais il faut l'héberger, je n'offre pas d'hébergement.
+## Faut il créditer ?
+La commande /infobot me crédite. Ce n'est pas obligé, mais c'est un moyen de le soutenir.
