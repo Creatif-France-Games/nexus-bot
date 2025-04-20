@@ -233,6 +233,23 @@ async def envoyer_news_error(interaction: discord.Interaction, error):
         await interaction.response.send_message(
             "Vous devez être administrateur pour utiliser cette commande.", ephemeral=True
         )
+# embed des infos du bot
+@bot.tree.command(name="infobot", description="Affiche les informations du bot.")
+async def infobot(interaction):
+    # Date de création fixée au 16 avril 2025
+    creation_date = "16 avril 2025"
+
+    embed = discord.Embed(
+        title="CF Games Bot",
+        description="Bot Discord Open-Source\n\nCode source : [GitHub Repository](https://github.com/Creatif-France-Games/cf-games-bot/)",
+        color=discord.Color.blue() 
+    )
+    embed.set_thumbnail(url=bot.user.avatar.url if bot.user.avatar else "")  # Ajoute l'avatar du bot (si dispo)
+    embed.add_field(name="Date de création", value=creation_date, inline=False)
+    embed.set_footer(text="Merci d'utiliser CF Games Bot !")
+
+    # Envoi de l'embed
+    await interaction.response.send_message(embed=embed)
 
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
