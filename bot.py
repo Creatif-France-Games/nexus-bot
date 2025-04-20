@@ -129,7 +129,7 @@ async def on_message(message):
 
     content = message.content.lower()
 
-    salutations = ["salut", "bonjour", "coucou", "hi", "hola", "hello", "yo", "bonsoir"]
+    salutations = ["salut", "bonjour", "coucou", "hi", "hola", "hello", "yo", "bonsoir", "cc", "slt", "bjr"]
     depart = ["au revoir", "bye", "a+", "ciao", "see ya", "à bientôt", "adieu", "bonne nuit", "bn", "tchao"]
     faim = ["j'ai faim", "faim", "j’ai la dalle", "je crève de faim", "trop faim", "je crève la dalle"]
     quoifeur = ["quoi"]
