@@ -1,44 +1,73 @@
-from flask import Flask, request
+from flask import Flask
 from threading import Thread
 
 app = Flask(__name__)
 
-visit_count = 0
+# Le statut du bot sera toujours "En ligne"
 bot_status = "En ligne"
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def home():
-    global visit_count
-    visit_count += 1
-
-    username = ""
-    if request.method == 'POST':
-        username = request.form.get('username')
-
     return f'''
     <html>
       <head>
         <title>CF Games Bot</title>
         <style>
-          body {{
+          /* Style global */
+          * {{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: Arial, sans-serif;
+          }}
+
+          /* Mise en forme du corps de la page */
+          body {{
+            background-color: #333;
+            color: white;
             text-align: center;
+            padding: 20px;
+            font-size: 18px;
             margin-top: 50px;
           }}
-          p {{
-            font-size: 24px;
+
+          h1 {{
+            font-size: 3rem;
+            margin-bottom: 20px;
           }}
+
+          p {{
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+          }}
+
           a {{
-            font-size: 20px;
             color: #007bff;
+            font-size: 1.1rem;
             text-decoration: none;
           }}
+
           a:hover {{
             text-decoration: underline;
           }}
-          .dark-theme {{
-            background-color: #333;
-            color: white;
+
+          /* Responsiveness */
+          @media (max-width: 768px) {{
+            body {{
+              font-size: 16px;
+            }}
+            h1 {{
+              font-size: 2.5rem;
+            }}
+          }}
+
+          @media (max-width: 480px) {{
+            body {{
+              font-size: 14px;
+            }}
+            h1 {{
+              font-size: 2rem;
+            }}
           }}
         </style>
       </head>
@@ -47,15 +76,6 @@ def home():
         <p>Bot Discord open-source</p>
         <p><strong>Le bot est actuellement fonctionnel, version 1</strong></p>
         <p>Statut du bot : <strong>{bot_status}</strong></p>
-        <p>Visites : {visit_count}</p>
-        <p><br><br><br></p>
-        
-        <form method="POST" action="/">
-          <input type="text" name="username" placeholder="Entrez votre pseudo" />
-          <input type="submit" value="Envoyer" />
-        </form>
-
-        <p>{'Bienvenue, ' + username + '!' if username else ''}</p>
 
         <p><a href="https://github.com/Creatif-France-Games/cf-games-bot" target="_blank">
           Code source : https://github.com/Creatif-France-Games/cf-games-bot
@@ -72,6 +92,11 @@ def run():
 def keep_alive():
     t = Thread(target=run)
     t.start()
+
+# Appel de la fonction keep_alive pour démarrer le serveur
+if __name__ == "__main__":
+    keep_alive()
+
 
     app.run(host='0.0.0.0', port=8080)
 
