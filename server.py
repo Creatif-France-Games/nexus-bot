@@ -13,32 +13,39 @@ def home():
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>CF GAMES</title>
         <style>
-            /* Style général du footer */
-            .footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
+            body {
+                background-color: #000;
+                color: #fff;
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
                 text-align: center;
-                background-color: #f1f1f1;
-                padding: 20px;
             }
 
-            .cf-games h1 {
+            .content {
+                padding: 40px 20px;
+            }
+
+            h1 {
                 font-size: 36px;
                 margin-bottom: 10px;
             }
 
-            .cf-games p {
+            p, a {
                 font-size: 14px;
-                color: #555;
+                color: #ddd;
+                line-height: 1.6;
             }
 
-            .site-info p {
-                font-size: 12px;
-                margin-bottom: 10px;
+            a {
+                color: #4CAF50;
+                text-decoration: none;
             }
 
-            /* Style du bouton */
+            a:hover {
+                text-decoration: underline;
+            }
+
             button {
                 background-color: #4CAF50;
                 color: white;
@@ -46,13 +53,13 @@ def home():
                 border: none;
                 cursor: pointer;
                 font-size: 16px;
+                margin-top: 20px;
             }
 
             button:hover {
                 background-color: #45a049;
             }
 
-            /* Style de la fenêtre modale */
             .modal {
                 display: none;
                 position: fixed;
@@ -61,17 +68,18 @@ def home():
                 top: 0;
                 width: 100%;
                 height: 100%;
-                background-color: rgba(0, 0, 0, 0.4);
+                background-color: rgba(0, 0, 0, 0.8);
                 padding-top: 60px;
             }
 
             .modal-content {
-                background-color: #fefefe;
+                background-color: #222;
                 margin: 5% auto;
                 padding: 20px;
                 border: 1px solid #888;
                 width: 80%;
                 max-width: 600px;
+                color: white;
             }
 
             .close {
@@ -83,35 +91,28 @@ def home():
 
             .close:hover,
             .close:focus {
-                color: black;
+                color: white;
                 text-decoration: none;
                 cursor: pointer;
             }
         </style>
     </head>
     <body>
-        <!-- Ton contenu principal ici -->
+        <div class="content">
+            <h1>CF GAMES</h1>
+            <p>CF Games est le créateur de Créatif France et de Best Survie, deux serveurs MultiCraft. Je code aussi un bot Discord open source sur GitHub.</p>
+            <p>Ce site est un blog perso, sans collecte de données, sans pubs et sans but commercial.</p>
+            <button id="info-btn">Infos sur le site</button>
+        </div>
 
-        <div class="footer">
-            <div class="cf-games">
-                <h1>CF GAMES</h1>
-                <p>CF Games est le créateur de Créatif France et de Best Survie, deux serveurs MultiCraft. Je code aussi un bot Discord open source sur GitHub.</p>
-            </div>
-            
-            <div class="site-info">
-                <p>Ce site est un blog perso, sans collecte de données, sans pubs et sans but commercial.</p>
-                <button id="info-btn">Infos sur le site</button>
-            </div>
-
-            <div id="legal-modal" class="modal">
-                <div class="modal-content">
-                    <span id="close-btn" class="close">&times;</span>
-                    <h2>Mentions légales</h2>
-                    <p><strong>Éditeur :</strong><br>CF GAMES (pseudo)<br>Email : creatif.france@outlook.com</p>
-                    <p><strong>Hébergeur :</strong><br>Render Services, Inc.<br>525 Brannan St Ste 300, San Francisco, CA 94107, USA<br>Tél : +1 415 830 4762<br>Email : abuse@render.com</p>
-                    <p><strong>GitHub :</strong><br><a href="https://github.com/Creatif-France-Games/cf-games-bot" target="_blank">cf-games-bot</a></p>
-                    <p><strong>Responsabilité :</strong><br>L’éditeur s’efforce d’être exact, mais ne peut être tenu pour responsable des erreurs ou omissions.</p>
-                </div>
+        <div id="legal-modal" class="modal">
+            <div class="modal-content">
+                <span id="close-btn" class="close">&times;</span>
+                <h2>Mentions légales</h2>
+                <p><strong>Éditeur :</strong><br>CF GAMES (pseudo)<br>Email : creatif.france@outlook.com</p>
+                <p><strong>Hébergeur :</strong><br>Render Services, Inc.<br>525 Brannan St Ste 300, San Francisco, CA 94107, USA<br>Tél : +1 415 830 4762<br>Email : abuse@render.com</p>
+                <p><strong>GitHub :</strong><br><a href="https://github.com/Creatif-France-Games/cf-games-bot" target="_blank">cf-games-bot</a></p>
+                <p><strong>Responsabilité :</strong><br>L’éditeur s’efforce d’être exact, mais ne peut être tenu pour responsable des erreurs ou omissions.</p>
             </div>
         </div>
 
@@ -129,11 +130,9 @@ def run():
     app.run(host='0.0.0.0', port=5000)
 
 def keep_alive():
-    """Lance le petit serveur Flask en arrière-plan."""
     t = Thread(target=run)
     t.daemon = True
     t.start()
 
 if __name__ == '__main__':
-    # Si tu veux juste lancer le serveur web seul :
     run()
