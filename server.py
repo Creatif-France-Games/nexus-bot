@@ -19,16 +19,21 @@ def home():
                 font-family: Arial, sans-serif;
                 margin: 0;
                 padding: 0;
-                text-align: center;
             }
 
             .content {
-                padding: 40px 20px;
+                padding: 40px 20px 100px;
+                text-align: center;
             }
 
             h1 {
                 font-size: 36px;
                 margin-bottom: 10px;
+            }
+
+            h2 {
+                font-size: 24px;
+                margin-top: 40px;
             }
 
             p, a {
@@ -53,11 +58,20 @@ def home():
                 border: none;
                 cursor: pointer;
                 font-size: 16px;
-                margin-top: 20px;
+                margin-top: 10px;
             }
 
             button:hover {
                 background-color: #45a049;
+            }
+
+            .footer {
+                background-color: #111;
+                text-align: center;
+                padding: 20px;
+                position: fixed;
+                bottom: 0;
+                width: 100%;
             }
 
             .modal {
@@ -102,6 +116,16 @@ def home():
             <h1>CF GAMES</h1>
             <p>CF Games est le créateur de Créatif France et de Best Survie, deux serveurs MultiCraft. Je code aussi un bot Discord open source sur GitHub.</p>
             <p>Ce site est un blog perso, sans collecte de données, sans pubs et sans but commercial.</p>
+            <p>GitHub : <a href="https://www.github.com/Creatif-France-Games/cf-games-bot/" target="_blank">cf-games-bot</a></p>
+
+            <h2>Discord</h2>
+            <a href="https://www.discord.gg/Zzcb9jBTJ" target="_blank">
+                <button>Rejoindre le serveur</button>
+            </a>
+            <p>Bot : en ligne</p>
+        </div>
+
+        <div class="footer">
             <button id="info-btn">Infos sur le site</button>
         </div>
 
@@ -111,7 +135,7 @@ def home():
                 <h2>Mentions légales</h2>
                 <p><strong>Éditeur :</strong><br>CF GAMES (pseudo)<br>Email : creatif.france@outlook.com</p>
                 <p><strong>Hébergeur :</strong><br>Render Services, Inc.<br>525 Brannan St Ste 300, San Francisco, CA 94107, USA<br>Tél : +1 415 830 4762<br>Email : abuse@render.com</p>
-                <p><strong>GitHub :</strong><br><a href="https://github.com/Creatif-France-Games/cf-games-bot" target="_blank">cf-games-bot</a></p>
+                <p><strong>GitHub :</strong><br><a href="https://www.github.com/Creatif-France-Games/cf-games-bot/" target="_blank">cf-games-bot</a></p>
                 <p><strong>Responsabilité :</strong><br>L’éditeur s’efforce d’être exact, mais ne peut être tenu pour responsable des erreurs ou omissions.</p>
             </div>
         </div>
