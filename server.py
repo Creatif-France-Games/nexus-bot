@@ -1,4 +1,5 @@
 from flask import Flask, render_template_string
+from threading import Thread
 
 app = Flask(__name__)
 
@@ -91,57 +92,48 @@ def home():
     <body>
         <!-- Ton contenu principal ici -->
 
-        <!-- Section de bas de page -->
         <div class="footer">
             <div class="cf-games">
                 <h1>CF GAMES</h1>
-                <p>CF Games est le créateur de Créatif France et de Best Survie, deux serveurs MultiCraft. De plus, je code un bot discord open source dispo sur GitHub.</p>
+                <p>CF Games est le créateur de Créatif France et de Best Survie, deux serveurs MultiCraft. Je code aussi un bot Discord open source sur GitHub.</p>
             </div>
             
             <div class="site-info">
-                <p>Ce site est un blog personnel. Il ne collecte aucune donnée personnelle, ne contient aucune publicité, et n’a aucun but commercial.</p>
+                <p>Ce site est un blog perso, sans collecte de données, sans pubs et sans but commercial.</p>
                 <button id="info-btn">Infos sur le site</button>
             </div>
 
-            <!-- Fenêtre modale pour afficher les mentions légales -->
             <div id="legal-modal" class="modal">
                 <div class="modal-content">
                     <span id="close-btn" class="close">&times;</span>
                     <h2>Mentions légales</h2>
-                    <p><strong>Éditeur du site :</strong><br>CF GAMES (pseudo)<br>Email : creatif.france@outlook.com</p>
-                    <p><strong>Hébergeur :</strong><br>Render Services, Inc.<br>Adresse : 525 Brannan Street Ste 300, San Francisco, CA 94107, États-Unis<br>Téléphone : +1 415 830 4762<br>Email : abuse@render.com</p>
-                    <p><strong>GitHub :</strong><br><a href="https://github.com/Creatif-France-Games/cf-games-bot" target="_blank">https://github.com/Creatif-France-Games/cf-games-bot</a></p>
-                    <p><strong>Responsabilité :</strong><br>L’éditeur s’efforce d’assurer l’exactitude des informations publiées, mais ne saurait être tenu responsable des erreurs ou omissions. Les liens externes sont fournis à titre informatif et n’engagent pas la responsabilité de l’éditeur.</p>
+                    <p><strong>Éditeur :</strong><br>CF GAMES (pseudo)<br>Email : creatif.france@outlook.com</p>
+                    <p><strong>Hébergeur :</strong><br>Render Services, Inc.<br>525 Brannan St Ste 300, San Francisco, CA 94107, USA<br>Tél : +1 415 830 4762<br>Email : abuse@render.com</p>
+                    <p><strong>GitHub :</strong><br><a href="https://github.com/Creatif-France-Games/cf-games-bot" target="_blank">cf-games-bot</a></p>
+                    <p><strong>Responsabilité :</strong><br>L’éditeur s’efforce d’être exact, mais ne peut être tenu pour responsable des erreurs ou omissions.</p>
                 </div>
             </div>
         </div>
 
         <script>
-            // Récupère les éléments nécessaires
-            var modal = document.getElementById("legal-modal");
-            var btn = document.getElementById("info-btn");
-            var span = document.getElementById("close-btn");
-
-            // Lorsque l'utilisateur clique sur le bouton, ouvre la modale
-            btn.onclick = function() {
-                modal.style.display = "block";
-            }
-
-            // Lorsque l'utilisateur clique sur (x), ferme la modale
-            span.onclick = function() {
-                modal.style.display = "none";
-            }
-
-            // Lorsque l'utilisateur clique n'importe où en dehors de la modale, la ferme
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
-            }
+            const modal = document.getElementById("legal-modal");
+            document.getElementById("info-btn").onclick = () => modal.style.display = "block";
+            document.getElementById("close-btn").onclick = () => modal.style.display = "none";
+            window.onclick = e => { if (e.target == modal) modal.style.display = "none"; };
         </script>
     </body>
     </html>
     """)
 
+def run():
+    app.run(host='0.0.0.0', port=5000)
+
+def keep_alive():
+    """Lance le petit serveur Flask en arrière-plan."""
+    t = Thread(target=run)
+    t.daemon = True
+    t.start()
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Si tu veux juste lancer le serveur web seul :
+    run()
