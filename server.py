@@ -119,7 +119,7 @@ def home():
             <p>GitHub : <a href="https://www.github.com/Creatif-France-Games/cf-games-bot/" target="_blank">cf-games-bot</a></p>
 
             <h2>Discord</h2>
-            <a href="https://www.discord.gg/Zzcb9jBTJ" target="_blank">
+            <a href="https://discord.gg/Zzcb9j8BTJ" target="_blank">
                 <button>Rejoindre le serveur</button>
             </a>
             <p>Bot : en ligne</p>
