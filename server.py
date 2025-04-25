@@ -1,4 +1,3 @@
-# server.py
 from flask import Flask, request
 from threading import Thread
 
@@ -65,7 +64,15 @@ def home():
     </html>
     '''
 
+# Fonction pour démarrer Flask dans un thread
 def run():
+    app.run(host='0.0.0.0', port=8080)
+
+# Fonction keep_alive pour lancer le serveur dans un thread séparé
+def keep_alive():
+    t = Thread(target=run)
+    t.start()
+
     app.run(host='0.0.0.0', port=8080)
 
 def keep_alive():
