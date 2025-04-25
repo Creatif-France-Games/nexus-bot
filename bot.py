@@ -12,12 +12,22 @@ import wikipediaapi
 from discord.app_commands import MissingPermissions
 from discord.ui import View, Button
 
-# Initialisation de Flask
+from flask import Flask
+from threading import Thread
+
 app = Flask('')
 
 @app.route('/')
 def home():
-    return "Bot actif !"
+    return '''
+    <p>
+      CF Games Bot<br>
+      Bot Discord open-source<br>
+      <a href="https://github.com/Creatif-France-Games/cf-games-bot" target="_blank">
+        Code source : https://github.com/Creatif-France-Games/cf-games-bot
+      </a>
+    </p>
+    '''
 
 def run():
     app.run(host='0.0.0.0', port=8080)
