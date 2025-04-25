@@ -17,16 +17,46 @@ from threading import Thread
 
 app = Flask('')
 
+from flask import Flask
+from threading import Thread
+
+app = Flask('')
+
 @app.route('/')
 def home():
     return '''
-    <p>
-      CF Games Bot<br>
-      Bot Discord open-source<br>
-      <a href="https://github.com/Creatif-France-Games/cf-games-bot" target="_blank">
-        Code source : https://github.com/Creatif-France-Games/cf-games-bot
-      </a>
-    </p>
+    <html>
+      <head>
+        <title>CF Games Bot</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+          }
+          p {
+            font-size: 24px;
+          }
+          a {
+            font-size: 20px;
+            color: #007bff;
+            text-decoration: none;
+          }
+          a:hover {
+            text-decoration: underline;
+          }
+        </style>
+      </head>
+      <body>
+        <p><strong>CF Games Bot</strong></p>
+        <p>Bot Discord open-source</p>
+        <p><strong>Le bot est actuellement fonctionnel, version 1</strong></p>
+        <p><br><br><br></p> <!-- Trois sauts de ligne -->
+        <p><a href="https://github.com/Creatif-France-Games/cf-games-bot" target="_blank">
+          Code source : https://github.com/Creatif-France-Games/cf-games-bot
+        </a></p>
+      </body>
+    </html>
     '''
 
 def run():
@@ -35,6 +65,7 @@ def run():
 def keep_alive():
     t = Thread(target=run)
     t.start()
+
 
 # Charger le token depuis le fichier .env
 load_dotenv()
