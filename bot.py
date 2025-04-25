@@ -9,6 +9,7 @@ from discord import app_commands
 import wikipediaapi
 from discord.app_commands import MissingPermissions
 from discord.ui import View, Button
+from server import keep_alive
 
 # Charger le token depuis le fichier .env
 load_dotenv()
