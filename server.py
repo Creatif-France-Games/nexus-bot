@@ -132,7 +132,7 @@ def home():
         <div id="legal-modal" class="modal">
             <div class="modal-content">
                 <span id="close-btn" class="close">&times;</span>
-                <h2>Mentions légales</h2>
+                <h2>Infos du site</h2>
                 <p><strong>Éditeur :</strong><br>CF GAMES (pseudo)<br>Email : creatif.france@outlook.com</p>
                 <p><strong>Hébergeur :</strong><br>Render Services, Inc.<br>525 Brannan St Ste 300, San Francisco, CA 94107, USA<br>Tél : +1 415 830 4762<br>Email : abuse@render.com</p>
                 <p><strong>GitHub :</strong><br><a href="https://www.github.com/Creatif-France-Games/cf-games-bot/" target="_blank">cf-games-bot</a></p>
