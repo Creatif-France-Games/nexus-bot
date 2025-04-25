@@ -13,7 +13,7 @@ def home():
       <head>
         <title>CF Games Bot</title>
         <!-- Favicon via lien URL -->
-        <link rel="icon" href="https://private-user-images.githubusercontent.com/207845454/437530336-54a16db6-dda0-4c9c-9797-d81b469fb46b.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDU2MDA5MTIsIm5iZiI6MTc0NTYwMDYxMiwicGF0aCI6Ii8yMDc4NDU0NTQvNDM3NTMwMzM2LTU0YTE2ZGI2LWRkYTAtNGM5Yy05Nzk3LWQ4MWI0NjlmYjQ2Yi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwNDI1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDQyNVQxNzAzMzJaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1iMDA3NTY2MzViMmYzMzM1YWM1MTM1M2YyMThmMDE3NzcyNGUyNTEwOTIzNGFjM2NiMWI4YjU5NDQyNjhiOGY1JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.YgY5g6P0njjSyDDza5efHov7tGWP2NJgbf5IbgyQpRs">
+        <link rel="icon" href="https://private-user-images.githubusercontent.com/207845454/437530336-54a16db6-dda0-4c9c-9797-d81b469fb46b.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDU2MDA5MTIsIm5iZiI6MTc0NTYwMDYxMiwicGF0aCI6Ii8yMDc4NDU0NTQvNDM3NTMwMzM2LTU0YTE2ZGI2LWRkYTAtNGM5Yy05Nzk3LWQ4MWI0NjlmYjQ2Yi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwNDI1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDQyNVQxNzAzMzJaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1iMDA3NTY2MzViMmYzMzM1YWM1MTM1M2YyMThmMDE3NzcyNGUyNTEwOTIzNGFjM2NiMWI4YjU5NDQyNjhiOGY1JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.YgY5g6P0njjSyDDza5efHov7tGWP2NJgbf5IbgyQpRs" type="image/png">
         <style>
           /* Style global */
           * {{
@@ -51,6 +51,23 @@ def home():
 
           a:hover {{
             text-decoration: underline;
+          }}
+
+          /* Style pour le bouton Discord */
+          .discord-btn {{
+            display: inline-block;
+            background-color: #7289da;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 1.2rem;
+          }}
+
+          .discord-btn:hover {{
+            background-color: #5b6e9f;
           }}
 
           /* Accessibilité */
@@ -93,8 +110,11 @@ def home():
 
         <p><a href="https://github.com/Creatif-France-Games/cf-games-bot" target="_blank" aria-label="Voir le code source du bot">Code source : https://github.com/Creatif-France-Games/cf-games-bot</a></p>
 
+        <!-- Lien vers le serveur Discord -->
+        <p><a href="https://www.discord.gg/Zzcb9j8BTJ" target="_blank" class="discord-btn">Rejoindre le serveur Discord</a></p>
+
         <!-- Ajout d'un message d'accessibilité -->
-        <p class="sr-only">Cette page affiche le statut du bot en ligne. Vous pouvez voir le code source du projet sur GitHub.</p>
+        <p class="sr-only">Cette page affiche le statut du bot en ligne. Vous pouvez voir le code source du projet sur GitHub et rejoindre le serveur Discord.</p>
       </body>
     </html>
     '''
@@ -111,12 +131,6 @@ def keep_alive():
 # Appel de la fonction keep_alive pour démarrer le serveur
 if __name__ == "__main__":
     keep_alive()
-
-    app.run(host='0.0.0.0', port=8080)
-
-def keep_alive():
-    t = Thread(target=run)
-    t.start()
 
     app.run(host='0.0.0.0', port=8080)
 
