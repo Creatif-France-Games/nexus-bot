@@ -1,5 +1,3 @@
-from flask import Flask
-from threading import Thread
 import discord
 from discord.ext import commands
 import random
@@ -11,61 +9,6 @@ from discord import app_commands
 import wikipediaapi
 from discord.app_commands import MissingPermissions
 from discord.ui import View, Button
-
-from flask import Flask
-from threading import Thread
-
-app = Flask('')
-
-from flask import Flask
-from threading import Thread
-
-app = Flask('')
-
-@app.route('/')
-def home():
-    return '''
-    <html>
-      <head>
-        <title>CF Games Bot</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-          }
-          p {
-            font-size: 24px;
-          }
-          a {
-            font-size: 20px;
-            color: #007bff;
-            text-decoration: none;
-          }
-          a:hover {
-            text-decoration: underline;
-          }
-        </style>
-      </head>
-      <body>
-        <p><strong>CF Games Bot</strong></p>
-        <p>Bot Discord open-source</p>
-        <p><strong>Le bot est actuellement fonctionnel, version 1</strong></p>
-        <p><br><br><br></p> <!-- Trois sauts de ligne -->
-        <p><a href="https://github.com/Creatif-France-Games/cf-games-bot" target="_blank">
-          Code source : https://github.com/Creatif-France-Games/cf-games-bot
-        </a></p>
-      </body>
-    </html>
-    '''
-
-def run():
-    app.run(host='0.0.0.0', port=8080)
-
-def keep_alive():
-    t = Thread(target=run)
-    t.start()
-
 
 # Charger le token depuis le fichier .env
 load_dotenv()
