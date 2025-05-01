@@ -1,7 +1,14 @@
-from flask import Flask, render_template_string
+from flask import Flask, render_template_string, send_from_directory
 from threading import Thread
+import os
 
 app = Flask(__name__)
+
+# Route pour le favicon
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route('/')
 def home():
@@ -12,6 +19,7 @@ def home():
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>CF GAMES</title>
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <style>
             body {
                 background-color: #000;
