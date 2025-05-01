@@ -24,13 +24,13 @@ Ce projet est sous licence MIT. Tu peux consulter le fichier [LICENSE](LICENSE) 
 
 ## Qui a fait ça ? 👨‍💻👩‍💻
 
-Créé par Créatif France Games et ChatGPT, corrigé et amélioré avec amour. 100% transparent, j'ai utilisé l'IA. 😎
+Créé par Créatif France Games et ChatGPT, corrigé et amélioré avec amour.
  
 # FAQ 
 
 ## Puis-je l'installer sur mon serveur ?
 Oui, mais il faut l'héberger, je n'offre pas d'hébergement.
 ## Faut il créditer ?
-La commande /infobot me crédite. Ce n'est pas obligé, mais c'est un moyen de le soutenir.
+La commande /infobot me crédite. Ce n'est pas obligé, mais c'est un moyen de me soutenir.
 ## Quand mettre à jour le bot ?
 Je publie quelques ajouts et correctifs dès que j'ai le temps, mais inutile de mettre le bot à jour à chaque fois, faîtes le plutôt lorsque je déclare une update sur ce GitHub.
