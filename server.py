@@ -135,6 +135,9 @@ def home():
             <h2>Serveurs MultiCraft</h2>
             <p>Best Survie : serveur PVP avec clan, expérience de survie avec système d'économie et deux niveaux de jeu. Code d'invitation : X72KP62P<p>
             <p>Créatif France : build libre sur un grand serveur. Code d'invitation : 432IBSK4.</p>
+
+            <h2>Infos</h2>
+            <p>1 Mai 2025 - La version V3.3 arrive bientôt ! Nouveautés au programme : La anarchy zone, la ou tout est permis ! - L'arrivée de futurs évènements bedwars et build battle, des zones dédiées ont été construises ! Date : non annoncée</p>
         </div>
 
         <div class="footer">
