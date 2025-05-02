@@ -121,24 +121,12 @@ def home():
     </head>
     <body>
         <div class="content">
-            <h1>CF GAMES</h1>
-            <p>CF Games est le créateur de Créatif France et de Best Survie, deux serveurs MultiCraft. Je code aussi un bot Discord open source sur GitHub.</p>
-            <p>Ce site est un blog perso, sans collecte de données, sans pubs et sans but commercial.</p>
-            <p>GitHub : <a href="https://www.github.com/Creatif-France-Games/cf-games-bot/" target="_blank">cf-games-bot</a></p>
-
+            
             <h2>Discord</h2>
             <a href="https://discord.gg/Zzcb9j8BTJ" target="_blank">
                 <button>Rejoindre le serveur</button>
             </a>
             <p>Bot : en ligne</p>
-
-            <h2>Serveurs MultiCraft</h2>
-            <p>Best Survie : serveur PVP avec clan, expérience de survie avec système d'économie et deux niveaux de jeu. Code d'invitation : X72KP62P<p>
-            <p>Créatif France : build libre sur un grand serveur. Code d'invitation : 432IBSK4.</p>
-
-            <h2>Infos</h2>
-            <p>1 Mai 2025 - La version V3.3 arrive bientôt ! Nouveautés au programme : La anarchy zone, la ou tout est permis ! - L'arrivée de futurs évènements bedwars et build battle, des zones dédiées ont été construises ! Date : non annoncée</p>
-        </div>
 
         <div class="footer">
             <button id="info-btn">Mentions légales</button>
