@@ -176,7 +176,7 @@ async def envoyer_news(interaction: discord.Interaction):
 
     try:
         # Attente de la réponse de l'utilisateur
-        msg = await bot.wait_for("message", check=check, timeout=60)
+        msg = await bot.wait_for("message", check=check, timeout=600)
 
         # Création de la vue de confirmation
         view = ConfirmationView(interaction.user, msg.content)
