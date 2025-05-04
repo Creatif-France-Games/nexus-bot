@@ -3,3 +3,5 @@ flask
 python-dotenv
 wikipedia-api
 requests
+yt-dlp
+discord.py[voice]
