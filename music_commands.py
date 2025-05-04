@@ -1,59 +1,64 @@
-import yt_dlp
-from discord import FFmpegPCMAudio
 import discord
+from discord.ext import commands
+import youtube_dl
+from discord import app_commands
 
-async def join(ctx: discord.Interaction):
-    channel = ctx.user.voice.channel
-    if channel:
-        await channel.connect()
-        await ctx.response.send_message(f"Je me connecte à {channel} !")
-    else:
-        await ctx.response.send_message("Tu dois être dans un canal vocal pour que je puisse te rejoindre.")
-
-async def play(ctx: discord.Interaction, url: str):
-    channel = ctx.user.voice.channel
-    if not channel:
-        await ctx.response.send_message("Tu dois être dans un canal vocal pour jouer de la musique.")
+# Commande Slash pour jouer de la musique
+@bot.tree.command(name="play", description="Joue de la musique depuis YouTube.")
+async def play(interaction: discord.Interaction, url: str):
+    voice_channel = interaction.user.voice.channel
+    if not voice_channel:
+        await interaction.response.send_message("Tu dois être dans un canal vocal pour utiliser cette commande.", ephemeral=True)
         return
 
-    # Récupérer l'URL de la vidéo YouTube
+    # Se connecter au canal vocal
+    voice_client = await voice_channel.connect()
+
+    # Télécharger et lire la musique
     ydl_opts = {
         'format': 'bestaudio/best',
         'postprocessors': [{
-            'key': 'FFmpegAudioConvertor',
+            'key': 'FFmpegAudioConverter',
             'preferredcodec': 'mp3',
             'preferredquality': '192',
         }],
         'outtmpl': 'downloads/%(id)s.%(ext)s',
+        'quiet': True,
     }
 
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
         url2 = info['formats'][0]['url']
-        voice_client = await channel.connect()
+        voice_client.play(discord.FFmpegPCMAudio(url2))
 
-        # Jouer l'audio dans le canal vocal
-        voice_client.play(FFmpegPCMAudio(url2))
+    await interaction.response.send_message(f"Lecture de la musique depuis : {url}")
 
-    await ctx.response.send_message(f"Je joue maintenant la musique depuis {url} !")
-
-async def stop(ctx: discord.Interaction):
-    if ctx.voice_client:
-        await ctx.voice_client.disconnect()
-        await ctx.response.send_message("Je me déconnecte du canal vocal.")
+# Commande Slash pour arrêter la musique
+@bot.tree.command(name="stop", description="Arrêter la musique.")
+async def stop(interaction: discord.Interaction):
+    voice_client = discord.utils.get(bot.voice_clients, guild=interaction.guild)
+    if voice_client and voice_client.is_playing():
+        voice_client.stop()
+        await interaction.response.send_message("La musique a été arrêtée.")
     else:
-        await ctx.response.send_message("Je ne suis pas connecté à un canal vocal.")
+        await interaction.response.send_message("Aucune musique en cours.")
 
-async def pause(ctx: discord.Interaction):
-    if ctx.voice_client and ctx.voice_client.is_playing():
-        ctx.voice_client.pause()
-        await ctx.response.send_message("La musique a été mise en pause.")
+# Commande Slash pour mettre en pause la musique
+@bot.tree.command(name="pause", description="Met la musique en pause.")
+async def pause(interaction: discord.Interaction):
+    voice_client = discord.utils.get(bot.voice_clients, guild=interaction.guild)
+    if voice_client and voice_client.is_playing():
+        voice_client.pause()
+        await interaction.response.send_message("La musique est en pause.")
     else:
-        await ctx.response.send_message("Aucune musique en cours de lecture.")
+        await interaction.response.send_message("Aucune musique en cours.")
 
-async def resume(ctx: discord.Interaction):
-    if ctx.voice_client and ctx.voice_client.is_paused():
-        ctx.voice_client.resume()
-        await ctx.response.send_message("La musique reprend.")
+# Commande Slash pour reprendre la musique
+@bot.tree.command(name="resume", description="Reprendre la musique.")
+async def resume(interaction: discord.Interaction):
+    voice_client = discord.utils.get(bot.voice_clients, guild=interaction.guild)
+    if voice_client and voice_client.is_paused():
+        voice_client.resume()
+        await interaction.response.send_message("La musique a été reprise.")
     else:
-        await ctx.response.send_message("Il n'y a pas de musique en pause.")
+        await interaction.response.send_message("Aucune musique en pause.")
