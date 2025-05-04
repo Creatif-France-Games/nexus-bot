@@ -30,7 +30,7 @@ def home():
             }
 
             .content {
-                padding: 40px 20px 100px;
+                padding: 0 20px 100px; /* enlevé padding-top */
                 text-align: center;
             }
 
