@@ -14,10 +14,22 @@ from server import keep_alive
 # Charger le token depuis le fichier .env
 load_dotenv()
 
+# Configuration des intents
+intents = discord.Intents.all()
+intents.message_content = True
+
+# Créer un bot sans préfixe de commande classique, uniquement pour les commandes slash
+bot = commands.Bot(command_prefix=None, intents=intents)
+
+# Synchroniser les commandes slash quand le bot est prêt
+@bot.event
+async def on_ready():
+    await bot.tree.sync()  # Synchroniser les commandes slash avec Discord
+    print(f'Connecté en tant que {bot.user} (commandes slash synchronisées)')
+
 # Configuration des IDs (à remplacer par vos vrais IDs)
 CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')  # Utilisez une variable d'environnement
 ROLE_NOTIFS_ID = os.getenv('ROLE_NOTIFS_ID')  # Utilisez une variable d'environnement
-
 
 # Liste des compliments
 COMPLIMENTS = [
