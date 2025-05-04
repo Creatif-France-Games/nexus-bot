@@ -10,19 +10,9 @@ import wikipediaapi
 from discord.app_commands import MissingPermissions
 from discord.ui import View, Button
 from server import keep_alive
-from music_commands import *  # Import des commandes musicales
 
 # Charger le token depuis le fichier .env
 load_dotenv()
-
-# Configuration des intents
-intents = discord.Intents.all()
-intents.message_content = True
-bot = commands.Bot(command_prefix='!', intents=intents)
-@bot.event
-async def on_ready():
-    await bot.tree.sync()
-    print(f'Connecté en tant que {bot.user} (commandes slash synchronisées)')
 
 # Configuration des IDs (à remplacer par vos vrais IDs)
 CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')  # Utilisez une variable d'environnement
