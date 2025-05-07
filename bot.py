@@ -123,6 +123,7 @@ async def on_message(message):
     faim = ["j'ai faim", "faim", "j’ai la dalle", "je crève de faim", "trop faim", "je crève la dalle"]
     quoifeur = ["quoi"]
     cava = ["ca va?", "cv?", "ça va ?", "bien ou bien"]
+    caca = ["caca"]
 
 
     if any(word in content for word in salutations):
@@ -139,6 +140,9 @@ async def on_message(message):
         return
     elif any(word in content for word in cava):
         await message.reply("Moi je vait bien, comme toujours ! Et toi?")
+        return
+    elif any(word in message.content.lower() for word in caca):
+        await message.reply("💩 Voici une image pour toi :\nhttps://cdn.pixabay.com/photo/2014/02/13/11/56/wc-265278_1280.jpg")
         return
 
     await bot.process_commands(message)
