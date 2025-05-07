@@ -17,7 +17,9 @@ load_dotenv()
 # Configuration des intents
 intents = discord.Intents.all()
 intents.message_content = True
-bot = discord.Client(intents=intents)
+
+# Remplacer discord.Client par commands.Bot
+bot = commands.Bot(command_prefix='!', intents=intents)  # Assure-toi que c'est un Bot et non un Client
 
 # Charger les extensions dans un setup coroutine
 async def on_ready():
