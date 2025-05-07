@@ -25,10 +25,11 @@ Afin de respecter le travail des developpeurs participants à ce projet, j'ai ch
 ## Qui a fait ça ? 👨‍💻👩‍💻
 
 Créé par Team CF Games et ChatGPT, corrigé et amélioré avec amour.
+[SIte Web](https://cfgames.fr.nf/)
  
 # FAQ 
 
 ## Puis-je l'installer sur mon serveur ?
 Oui, mais il faut l'héberger, je n'offre pas d'hébergement.
 ## Faut il créditer ?
-La commande /infobot me crédite. Ce n'est pas obligé, mais c'est un moyen de nous soutenir.
+Oui. La license CC BY nécessite une attribution. Réfère toi au fichier [LICENSE](LICENSE).
