@@ -20,21 +20,13 @@ intents.message_content = True
 bot = discord.Client(intents=intents)
 
 # Charger les extensions dans un setup coroutine
-@bot.event
 async def on_ready():
     await bot.tree.sync()
     print(f'Connecté en tant que {bot.user} (commandes slash synchronisées)')
 
-# Charger les cogs deepseek et quiz
 async def setup_extensions():
     await bot.load_extension("deepseek")
     await bot.load_extension("quiz")
-
-bot.loop.create_task(setup_extensions())
-
-# Configuration des IDs (utiliser .env)
-CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')
-ROLE_NOTIFS_ID = os.getenv('ROLE_NOTIFS_ID')
 
 # Compliments
 COMPLIMENTS = [
@@ -93,7 +85,14 @@ async def on_message(message):
         return
     await bot.process_commands(message)
 
+# Lancer les extensions et le bot dans une fonction asynchrone
+async def main():
+    # Charge les extensions
+    await setup_extensions()
+    # Démarre le bot
+    token = os.getenv('DISCORD_TOKEN')
+    await bot.start(token)
+
 # Lancer le bot
 keep_alive()
-token = os.getenv('DISCORD_TOKEN')
-bot.run(token)
+asyncio.run(main())  # Remplace `bot.run(token)` par asyncio.run(main()) pour démarrer le bot
