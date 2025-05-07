@@ -46,13 +46,18 @@ COMPLIMENTS = [
 active_minuteurs = {}
 
 #Commande /wikipedia (ne marche pas, je suis désespéré, aidez moi mdr)
+# Commande /wikipedia
 @bot.tree.command(name='wikipedia', description='Fais une recherche sur Wikipédia.')
 async def wikipedia(interaction: discord.Interaction, recherche: str):
     recherche = recherche.strip()  # Nettoyer l'entrée utilisateur
-    wiki = wikipedia-api.Wikipedia('fr')  # ou 'en' pour l'anglais
+    
+    # Initialisation de l'API Wikipedia pour la langue française
+    wiki = wikipediaapi.Wikipedia('fr')
 
+    # Recherche de la page sur Wikipedia
     page = wiki.page(recherche)
 
+    # Si la page n'existe pas, envoyer un message d'erreur
     if not page.exists():
         await interaction.response.send_message(
             f"Aucune page trouvée pour : **{recherche}**. Essayez un autre mot-clé ou vérifiez l'orthographe.",
@@ -60,15 +65,19 @@ async def wikipedia(interaction: discord.Interaction, recherche: str):
         )
         return
 
+    # Extrait le résumé de la page
     extrait = page.summary[0:1000]
     if len(page.summary) > 1000:
-        extrait += "..."
+        extrait += "..."  # Ajouter "..." si l'extrait est plus long
 
+    # Récupère l'URL complète de la page
     url = page.fullurl
 
+    # Envoie le résumé avec un lien vers la page
     await interaction.response.send_message(
         f"**{page.title}**\n{extrait}\n[Lire plus ici]({url})"
     )
+
 
 
 # Commande Slash pour lancer un dé
