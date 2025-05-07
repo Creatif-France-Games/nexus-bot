@@ -21,12 +21,28 @@ intents.message_content = True
 # Remplacer discord.Client par commands.Bot
 bot = commands.Bot(command_prefix='!', intents=intents)  # Assure-toi que c'est un Bot et non un Client
 
+# Fonction pour charger les extensions
+async def setup_extensions():
+    await bot.load_extension("deepseek")
+    await bot.load_extension("quiz")
+    print('Extensions chargées')
+
+# Événement lorsque le bot est prêt
 @bot.event
 async def on_ready():
-    # Charger les cogs
     await bot.load_extension("deepseek")
     await bot.load_extension("quiz")
     print(f'Connecté en tant que {bot.user} (commandes slash synchronisées)')
+
+# Définir la fonction main pour démarrer le bot
+async def main():
+    await setup_extensions()
+    token = os.getenv('DISCORD_TOKEN')  # Assurez-vous que votre token est bien dans un fichier .env
+    await bot.start(token)
+
+# Utiliser asyncio.run pour démarrer le bot
+if __name__ == "__main__":
+    asyncio.run(main())
 
 
 # Compliments
