@@ -236,12 +236,11 @@ async def infobot(interaction):
     # Envoi de l'embed
     await interaction.response.send_message(embed=embed)
 
-# Le /avatar
-@bot.command()
-async def avatar(ctx, membre: discord.Member = None):
-    membre = membre or ctx.author
+@bot.tree.command(name="avatar", description="Affiche l'avatar d'un membre")
+async def avatar(interaction: discord.Interaction, membre: discord.Member = None):
+    membre = membre or interaction.user
     avatar_url = membre.avatar.url if membre.avatar else membre.default_avatar.url
-    await ctx.send(f"Avatar de {membre.display_name} : {avatar_url}")
+    await interaction.response.send_message(f"Avatar de {membre.display_name} : {avatar_url}")
 
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
