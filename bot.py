@@ -236,6 +236,12 @@ async def infobot(interaction):
     # Envoi de l'embed
     await interaction.response.send_message(embed=embed)
 
+#Le /avatar
+@bot.command()
+async def avatar(ctx, membre: discord.Member = None):
+    membre = membre or ctx.author
+    await ctx.send(f"Avatar de {membre.display_name} : {membre.avatar.url}")
+
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
 
