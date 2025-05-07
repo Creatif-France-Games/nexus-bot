@@ -267,7 +267,7 @@ async def minuteur(interaction: discord.Interaction, duree: int, nom: str):
     task = asyncio.create_task(timer_task())
     active_minuteurs[interaction.user.id] = task
 
-# Anuler le minuteur
+
 @bot.tree.command(name="annule_minuteur", description="Annule ton minuteur en cours")
 async def annule_minuteur(interaction: discord.Interaction):
     task = active_minuteurs.get(interaction.user.id)
