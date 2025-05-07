@@ -20,7 +20,7 @@ Et voilà, ce bot est prêt à faire sa magie ! ✨
 
 ## Licence 📜
 
-Ce projet est sous licence MIT. Tu peux consulter le fichier [LICENSE](LICENSE) pour plus de détails.
+Afin de respecter le travail des developpeurs participants à ce projet, j'ai choisi la license CC-BY qui nécessite une attribution. Consulte le [LICENSE](LICENSE) pour plus de détails.
 
 ## Qui a fait ça ? 👨‍💻👩‍💻
 
