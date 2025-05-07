@@ -23,7 +23,10 @@ async def on_ready():
     await bot.tree.sync()
     print(f'Connecté en tant que {bot.user} (commandes slash synchronisées)')
 
-# Configuration des IDs (à remplacer par vos vrais IDs)
+async def main():
+    await bot.load_extension("quiz")  # <- charge quiz.py
+    
+# Configuration des IDs (à configurer dans les variables secretes)
 CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')  # Utilisez une variable d'environnement
 ROLE_NOTIFS_ID = os.getenv('ROLE_NOTIFS_ID')  # Utilisez une variable d'environnement
 
