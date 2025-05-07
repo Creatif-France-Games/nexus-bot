@@ -41,7 +41,7 @@ COMPLIMENTS = [
     "{member.display_name}, t'es une personne vraiment cool et positive ! 😎"
 ]
 
-#Commande /wikipedia (en test, marche pas trop je crois)
+#Commande /wikipedia (ne marche pas, je suis désespéré, aidez moi mdr)
 @bot.tree.command(name='wikipedia', description='Fais une recherche sur Wikipédia.')
 async def wikipedia(interaction: discord.Interaction, recherche: str):
     recherche = recherche.strip()  # Nettoyer l'entrée utilisateur
@@ -236,11 +236,12 @@ async def infobot(interaction):
     # Envoi de l'embed
     await interaction.response.send_message(embed=embed)
 
-#Le /avatar
+# Le /avatar
 @bot.command()
 async def avatar(ctx, membre: discord.Member = None):
     membre = membre or ctx.author
-    await ctx.send(f"Avatar de {membre.display_name} : {membre.avatar.url}")
+    avatar_url = membre.avatar.url if membre.avatar else membre.default_avatar.url
+    await ctx.send(f"Avatar de {membre.display_name} : {avatar_url}")
 
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
