@@ -21,14 +21,13 @@ intents.message_content = True
 # Remplacer discord.Client par commands.Bot
 bot = commands.Bot(command_prefix='!', intents=intents)  # Assure-toi que c'est un Bot et non un Client
 
-# Charger les extensions dans un setup coroutine
+@bot.event
 async def on_ready():
-    await bot.tree.sync()
-    print(f'Connecté en tant que {bot.user} (commandes slash synchronisées)')
-
-async def setup_extensions():
+    # Charger les cogs
     await bot.load_extension("deepseek")
     await bot.load_extension("quiz")
+    print(f'Connecté en tant que {bot.user} (commandes slash synchronisées)')
+
 
 # Compliments
 COMPLIMENTS = [
