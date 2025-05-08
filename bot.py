@@ -11,6 +11,7 @@ from discord.app_commands import MissingPermissions
 from discord.ui import View, Button
 from server import keep_alive
 
+
 # Charger le token depuis le fichier .env
 load_dotenv()
 
@@ -18,8 +19,8 @@ load_dotenv()
 intents = discord.Intents.all()
 intents.message_content = True
 
-# Utiliser discord.Bot pour les commandes slash
-bot = discord.Bot(intents=intents)
+# Utiliser commands.Bot pour gérer les commandes slash avec préfixe
+bot = commands.Bot(command_prefix='!', intents=intents)
 
 @bot.event
 async def on_ready():
