@@ -287,15 +287,24 @@ async def annule_minuteur(interaction: discord.Interaction):
     else:
         await interaction.response.send_message("⚠️ Tu n’as pas de minuteur actif à annuler.")
 
-# Commande debile
+# Fonction pour charger les catégories depuis les fichiers .txt
+def charger_depuis_fichier(nom_fichier):
+    with open(f"Combinaisons debiles/{nom_fichier}", "r", encoding="utf-8") as f:
+        return [ligne.strip() for ligne in f if ligne.strip()]
+
+# Commande /debile
 @bot.command(name="debile", help="Génère une phrase complètement débile")
 async def debile(ctx):
+    # Chargement des catégories depuis les fichiers
     sujets = charger_depuis_fichier("sujets.txt")
     actions = charger_depuis_fichier("actions.txt")
     objets = charger_depuis_fichier("objets.txt")
     punchlines = charger_depuis_fichier("punchlines.txt")
 
+    # Génération de la blague débile
     phrase = f"🧠 {random.choice(sujets)} {random.choice(actions)} {random.choice(objets)}... {random.choice(punchlines)}"
+    
+    # Envoi de la blague
     await ctx.send(phrase)
 
 # Fonction pour charger les catégories depuis les fichiers .txt
