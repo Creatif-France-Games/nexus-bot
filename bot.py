@@ -294,6 +294,17 @@ async def annule_minuteur(interaction: discord.Interaction):
     else:
         await interaction.response.send_message("⚠️ Tu n’as pas de minuteur actif à annuler.")
 
+# Commande /dire
+@bot.command(name="dire")
+@commands.has_permissions(administrator=True)  # Vérifie si l'utilisateur est admin
+async def dire(ctx, *, message: str):
+    await ctx.send(message)  # Le bot renvoie le message
+
+# Gestion des erreurs pour la commande /dire si l'utilisateur n'est pas admin
+@dire.error
+async def dire_error(ctx, error):
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send("Désolé, vous devez être un administrateur pour utiliser cette commande.")
 
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
