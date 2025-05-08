@@ -11,10 +11,6 @@ from discord.app_commands import MissingPermissions
 from discord.ui import View, Button
 from server import keep_alive
 
-# Charger les fichiers .txt pour récupérer les catégories
-def charger_depuis_fichier(nom_fichier):
-    with open(f"Combinaisons debiles/{nom_fichier}", "r", encoding="utf-8") as f:
-        return [ligne.strip() for ligne in f if ligne.strip()]
 
 # Charger le token depuis le fichier .env
 load_dotenv()
@@ -27,20 +23,6 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 # Utiliser commands.Bot pour gérer les commandes slash avec préfixe
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-# Charger les fichiers nécessaires
-sujets = charger_depuis_fichier("sujets.txt")
-actions = charger_depuis_fichier("actions.txt")
-objets = charger_depuis_fichier("objets.txt")
-punchlines = charger_depuis_fichier("punchlines.txt")
-
-# Commande /debile
-@bot.tree.command(name="debile", description="Génère une phrase complètement débile", guild_ids=[1281639178689319067])
-async def debile(interaction: discord.Interaction):
-    # Générer une phrase aléatoire à partir des fichiers
-    phrase = f"🧠 {random.choice(sujets)} {random.choice(actions)} {random.choice(objets)}... {random.choice(punchlines)}"
-    
-    # Envoyer la phrase générée
-    await interaction.response.send_message(phrase)
 
 @bot.event
 async def on_ready():
