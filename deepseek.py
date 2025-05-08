@@ -1,10 +1,11 @@
 import discord
-from discord import app_commands
 from discord.ext import commands
+from discord import app_commands
 import requests
 import os
 from dotenv import load_dotenv
 
+# Charger les variables d'environnement
 load_dotenv()
 HF_TOKEN = os.getenv("HF_TOKEN")
 API_URL = "https://api-inference.huggingface.co/models/deepseek-ai/DeepSeek-R1"
@@ -27,6 +28,6 @@ class DeepSeek(commands.Cog):
         else:
             await interaction.followup.send("Erreur : impossible de récupérer une réponse.")
 
+# Fonction pour ajouter le Cog
 async def setup(bot):
     await bot.add_cog(DeepSeek(bot))
-
