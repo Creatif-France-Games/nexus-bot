@@ -10,8 +10,6 @@ import wikipediaapi
 from discord.app_commands import MissingPermissions
 from discord.ui import View, Button
 from server import keep_alive
-
-
 # Charger le token depuis le fichier .env
 load_dotenv()
 
@@ -20,37 +18,20 @@ intents = discord.Intents.all()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-# Utiliser commands.Bot pour gérer les commandes slash avec préfixe
-bot = commands.Bot(command_prefix='!', intents=intents)
+# Charger les extensions
+async def main():
+    await bot.load_extension("quiz")  # Extension quiz.py
+    await bot.load_extension("debile")  # Extension debile.py
 
-
+# Charger toutes les extensions dans un dossier
 @bot.event
 async def on_ready():
-    try:
-        # Synchroniser les commandes slash
-        await bot.tree.sync()  # Synchroniser à nouveau les commandes slash
-        print(f"Connecté en tant que {bot.user} (commandes slash synchronisées)")
-    except Exception as e:
-        print(f"Erreur lors de la synchronisation des commandes slash: {e}")
+    print(f"Connecté en tant que {bot.user}")
+    await main()  # Charge les extensions au démarrage
 
-
-# Charger les extensions (quiz et debile) depuis la racine
-async def main():
-    try:
-        await bot.load_extension("quiz")  # Charge quiz.py
-        await bot.load_extension("debile")  # Charge debile.py
-        print("Extensions chargées : quiz et debile")
-    except Exception as e:
-        print(f"Erreur lors du chargement des extensions : {e}")
-
-# Définition de la fonction d’appel principal
+# Utilisation de asyncio.run() pour démarrer le bot et charger les extensions
 if __name__ == "__main__":
-    # Code déjà initialisé pour garder le bot actif via Flask
-    keep_alive()
-
-    # Lancer le bot Discord
-    bot.loop.run_until_complete(main())  # Lancer les extensions avant de démarrer le bot
-    bot.run(os.getenv('DISCORD_TOKEN'))
+    asyncio.run(bot.start(os.getenv("DISCORD_TOKEN")))  # Utilisation de asyncio.run() ici
     
 # Configuration des IDs (à configurer dans les variables secretes)
 CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')  # Utilisez une variable d'environnement
