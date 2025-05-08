@@ -1,13 +1,13 @@
 import discord
-from discord.ext import commands
 from discord import app_commands
 import requests
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
-HF_TOKEN = os.getenv("HF_TOKEN")
-API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1"
+load_dotenv()  # Charge les variables d'environnement depuis le fichier .env
+
+HF_TOKEN = os.getenv("HF_TOKEN")  # Clé d'API Hugging Face
+API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B"
 
 class Mistral(commands.Cog):
     def __init__(self, bot):
@@ -17,14 +17,8 @@ class Mistral(commands.Cog):
     async def mistral(self, interaction: discord.Interaction, prompt: str):
         await interaction.response.defer()
 
-        headers = {"Authorization": f"Bearer {HF_TOKEN}"}
-        data = {
-            "inputs": prompt,
-            "parameters": {
-                "max_new_tokens": 256,
-                "temperature": 0.7
-            }
-        }
+        headers = {"Authorization": f"Bearer {HF_TOKEN}"}  # Authentification avec l'API Hugging Face
+        data = {"inputs": prompt}  # On envoie juste la question comme "input"
 
         try:
             response = requests.post(API_URL, headers=headers, json=data)
@@ -39,4 +33,5 @@ class Mistral(commands.Cog):
             await interaction.followup.send(f"Erreur : {str(e)}")
 
 async def setup(bot):
-    await bot.add_cog(Mistral(bot))
+    await bot.add_cog(mistralai(bot))  # Ajoute l'extension au bot
+
