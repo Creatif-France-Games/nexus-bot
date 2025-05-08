@@ -292,9 +292,9 @@ def charger_depuis_fichier(nom_fichier):
     with open(f"Combinaisons debiles/{nom_fichier}", "r", encoding="utf-8") as f:
         return [ligne.strip() for ligne in f if ligne.strip()]
 
-# Commande /debile
-@bot.command(name="debile", help="Génère une phrase complètement débile")
-async def debile(ctx):
+# Commande Slash /debile
+@bot.tree.command(name="debile", description="Génère une phrase complètement débile")
+async def debile(interaction: discord.Interaction):
     # Chargement des catégories depuis les fichiers
     sujets = charger_depuis_fichier("sujets.txt")
     actions = charger_depuis_fichier("actions.txt")
@@ -305,7 +305,7 @@ async def debile(ctx):
     phrase = f"🧠 {random.choice(sujets)} {random.choice(actions)} {random.choice(objets)}... {random.choice(punchlines)}"
     
     # Envoi de la blague
-    await ctx.send(phrase)
+    await interaction.response.send_message(phrase)
 
 # Fonction pour charger les catégories depuis les fichiers .txt
 def charger_depuis_fichier(nom_fichier):
