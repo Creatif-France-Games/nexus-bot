@@ -33,7 +33,7 @@ async def on_ready():
 # Charger les extensions dynamiquement
 async def main():
     # Charger les extensions `quiz` et `deepseek`
-    for extension in ["quiz", "deepseek"]:
+    for extension in ["quiz", "mistralai"]:
         try:
             await bot.load_extension(extension)
             print(f"Extension '{extension}' chargée avec succès.")
