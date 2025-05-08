@@ -1,14 +1,9 @@
 import discord
 from discord.ext import commands
-import random
 import os
 from dotenv import load_dotenv
 import asyncio
-from discord import ui
 from discord import app_commands
-import wikipediaapi
-from discord.app_commands import MissingPermissions
-from discord.ui import View, Button
 from server import keep_alive
 
 # Charger le token depuis le fichier .env
@@ -32,8 +27,8 @@ async def on_ready():
 
 # Charger les extensions dynamiquement
 async def main():
-    # Charger les extensions `quiz` et `deepseek`
-    for extension in ["quiz", "mistralai"]:
+    # Charger les extensions `quiz` et `mistralai`
+    for extension in ["quiz", "mistralai"]:  # Utilisation du bon nom de l'extension
         try:
             await bot.load_extension(extension)
             print(f"Extension '{extension}' chargée avec succès.")
