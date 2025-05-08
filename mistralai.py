@@ -7,18 +7,24 @@ from dotenv import load_dotenv
 
 load_dotenv()
 HF_TOKEN = os.getenv("HF_TOKEN")
-API_URL = "https://api-inference.huggingface.co/models/deepseek-ai/DeepSeek-R1"
+API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1"
 
-class DeepSeek(commands.Cog):
+class Mistral(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @app_commands.command(name="deepseek", description="Pose une question à DeepSeek")
-    async def deepseek(self, interaction: discord.Interaction, prompt: str):
+    @app_commands.command(name="mistral", description="Pose une question à Mistral")
+    async def mistral(self, interaction: discord.Interaction, prompt: str):
         await interaction.response.defer()
 
         headers = {"Authorization": f"Bearer {HF_TOKEN}"}
-        data = {"inputs": [{"role": "user", "content": prompt}]}
+        data = {
+            "inputs": prompt,
+            "parameters": {
+                "max_new_tokens": 256,
+                "temperature": 0.7
+            }
+        }
 
         try:
             response = requests.post(API_URL, headers=headers, json=data)
@@ -33,4 +39,4 @@ class DeepSeek(commands.Cog):
             await interaction.followup.send(f"Erreur : {str(e)}")
 
 async def setup(bot):
-    await bot.add_cog(DeepSeek(bot))
+    await bot.add_cog(Mistral(bot))
