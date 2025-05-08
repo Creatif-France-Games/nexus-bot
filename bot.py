@@ -33,10 +33,24 @@ async def on_ready():
     except Exception as e:
         print(f"Erreur lors de la synchronisation des commandes slash: {e}")
 
-# Fonction pour charger les extensions si nécessaire
+
+# Charger les extensions (quiz et debile) depuis la racine
 async def main():
-    await bot.load_extension("quiz")  # Charge quiz.py
-    await bot.load_extension("debile")  # Charge debile.py
+    try:
+        await bot.load_extension("quiz")  # Charge quiz.py
+        await bot.load_extension("debile")  # Charge debile.py
+        print("Extensions chargées : quiz et debile")
+    except Exception as e:
+        print(f"Erreur lors du chargement des extensions : {e}")
+
+# Définition de la fonction d’appel principal
+if __name__ == "__main__":
+    # Code déjà initialisé pour garder le bot actif via Flask
+    keep_alive()
+
+    # Lancer le bot Discord
+    bot.loop.run_until_complete(main())  # Lancer les extensions avant de démarrer le bot
+    bot.run(os.getenv('DISCORD_TOKEN'))
     
 # Configuration des IDs (à configurer dans les variables secretes)
 CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')  # Utilisez une variable d'environnement
