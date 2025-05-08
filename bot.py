@@ -1,9 +1,14 @@
 import discord
 from discord.ext import commands
+import random
 import os
 from dotenv import load_dotenv
 import asyncio
+from discord import ui
 from discord import app_commands
+import wikipediaapi
+from discord.app_commands import MissingPermissions
+from discord.ui import View, Button
 from server import keep_alive
 
 # Charger le token depuis le fichier .env
@@ -13,35 +18,17 @@ load_dotenv()
 intents = discord.Intents.all()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
-
-# IDs depuis les variables d'environnement
-DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')  # Token du bot
-CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')  # ID du canal des annonces
-ROLE_NOTIFS_ID = os.getenv('ROLE_NOTIFS_ID')  # ID du rôle pour les notifications
-
-# Événement lorsque le bot est prêt
 @bot.event
 async def on_ready():
-    await bot.tree.sync()  # Synchroniser les commandes slash
+    await bot.tree.sync()
     print(f'Connecté en tant que {bot.user} (commandes slash synchronisées)')
 
-# Charger les extensions dynamiquement
 async def main():
-    # Charger les extensions `quiz` et `mistralai`
-    for extension in ["quiz", "mistralai"]:  # Utilisation du bon nom de l'extension
-        try:
-            await bot.load_extension(extension)
-            print(f"Extension '{extension}' chargée avec succès.")
-        except Exception as e:
-            print(f"Erreur lors du chargement de l'extension '{extension}': {e}")
+    await bot.load_extension("quiz")  # <- charge quiz.py
     
-    # Garder le bot actif
-    keep_alive()
-    await bot.start(DISCORD_TOKEN)
-
-# Lancer le bot
-if __name__ == "__main__":
-    asyncio.run(main())
+# Configuration des IDs (à configurer dans les variables secretes)
+CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')  # Utilisez une variable d'environnement
+ROLE_NOTIFS_ID = os.getenv('ROLE_NOTIFS_ID')  # Utilisez une variable d'environnement
 
 
 # Liste des compliments
