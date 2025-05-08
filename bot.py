@@ -35,7 +35,8 @@ async def on_ready():
 
 # Fonction pour charger les extensions si nécessaire
 async def main():
-    await bot.load_extension("quiz")  # Charge quiz.py, à adapter si besoin
+    await bot.load_extension("quiz")  # Charge quiz.py
+    await bot.load_extension("debile")  # Charge debile.py
     
 # Configuration des IDs (à configurer dans les variables secretes)
 CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')  # Utilisez une variable d'environnement
