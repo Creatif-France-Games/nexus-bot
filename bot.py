@@ -17,14 +17,22 @@ load_dotenv()
 # Configuration des intents
 intents = discord.Intents.all()
 intents.message_content = True
-bot = commands.Bot(command_prefix='!', intents=intents)
+
+# Utiliser discord.Bot pour les commandes slash
+bot = discord.Bot(intents=intents)
+
 @bot.event
 async def on_ready():
-    await bot.tree.sync()
-    print(f'Connecté en tant que {bot.user} (commandes slash synchronisées)')
+    try:
+        # Synchroniser les commandes slash
+        await bot.tree.sync()  # Synchroniser à nouveau les commandes slash
+        print(f"Connecté en tant que {bot.user} (commandes slash synchronisées)")
+    except Exception as e:
+        print(f"Erreur lors de la synchronisation des commandes slash: {e}")
 
+# Fonction pour charger les extensions si nécessaire
 async def main():
-    await bot.load_extension("quiz")  # <- charge quiz.py
+    await bot.load_extension("quiz")  # Charge quiz.py, à adapter si besoin
     
 # Configuration des IDs (à configurer dans les variables secretes)
 CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')  # Utilisez une variable d'environnement
@@ -292,7 +300,7 @@ def charger_depuis_fichier(nom_fichier):
     with open(f"Combinaisons debiles/{nom_fichier}", "r", encoding="utf-8") as f:
         return [ligne.strip() for ligne in f if ligne.strip()]
 
-@bot.tree.command(name="debile", description="Génère une phrase complètement débile")
+@bot.tree.command(name="debile", description="Génère une phrase complètement débile", guild_ids=[YOUR_GUILD_ID])
 async def debile(interaction: discord.Interaction):
     sujets = charger_depuis_fichier("sujets.txt")
     actions = charger_depuis_fichier("actions.txt")
