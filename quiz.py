@@ -31,6 +31,6 @@ class Quiz(commands.Cog):
         else:
             await interaction.response.send_message(f"❌ Mauvaise réponse, {interaction.user.mention}.")
 
-# Fonction pour ajouter le Cog
-async def setup(bot):
-    await bot.add_cog(Quiz(bot))
+# Retirer l'await ici, juste un appel classique
+def setup(bot):
+    bot.add_cog(Quiz(bot))
