@@ -10,6 +10,7 @@ import wikipediaapi
 from discord.app_commands import MissingPermissions
 from discord.ui import View, Button
 from server import keep_alive
+
 # Charger le token depuis le fichier .env
 load_dotenv()
 
@@ -17,26 +18,12 @@ load_dotenv()
 intents = discord.Intents.all()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
-
-# Charger les extensions
-async def main():
-    await bot.load_extension("quiz")  # Extension quiz.py
-    await bot.load_extension("debile")  # Extension debile.py
-
-# Charger toutes les extensions dans un dossier
 @bot.event
 async def on_ready():
-    print(f"Connecté en tant que {bot.user}")
-    await main()  # Charge les extensions au démarrage
+    await bot.tree.sync()
+    print(f'Connecté en tant que {bot.user} (commandes slash synchronisées)')
 
-def run():
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 10000)))
-
-# Utilisation de asyncio.run() pour démarrer le bot et charger les extensions
-if __name__ == "__main__":
-    asyncio.run(bot.start(os.getenv("DISCORD_TOKEN")))  # Utilisation de asyncio.run() ici
-    
-# Configuration des IDs (à configurer dans les variables secretes)
+# Configuration des IDs (à remplacer par vos vrais IDs)
 CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')  # Utilisez une variable d'environnement
 ROLE_NOTIFS_ID = os.getenv('ROLE_NOTIFS_ID')  # Utilisez une variable d'environnement
 
@@ -53,21 +40,15 @@ COMPLIMENTS = [
     "{member.display_name}, ton énergie est contagieuse ! ⚡",
     "{member.display_name}, t'es une personne vraiment cool et positive ! 😎"
 ]
-active_minuteurs = {}
 
-#Commande /wikipedia (ne marche pas, je suis désespéré, aidez moi mdr)
-# Commande /wikipedia
+#Commande /wikipedia (en test, marche pas trop je crois)
 @bot.tree.command(name='wikipedia', description='Fais une recherche sur Wikipédia.')
 async def wikipedia(interaction: discord.Interaction, recherche: str):
     recherche = recherche.strip()  # Nettoyer l'entrée utilisateur
-    
-    # Initialisation de l'API Wikipedia pour la langue française
-    wiki = wikipediaapi.Wikipedia('fr')
+    wiki = wikipedia-api.Wikipedia('fr')  # ou 'en' pour l'anglais
 
-    # Recherche de la page sur Wikipedia
     page = wiki.page(recherche)
 
-    # Si la page n'existe pas, envoyer un message d'erreur
     if not page.exists():
         await interaction.response.send_message(
             f"Aucune page trouvée pour : **{recherche}**. Essayez un autre mot-clé ou vérifiez l'orthographe.",
@@ -75,19 +56,15 @@ async def wikipedia(interaction: discord.Interaction, recherche: str):
         )
         return
 
-    # Extrait le résumé de la page
     extrait = page.summary[0:1000]
     if len(page.summary) > 1000:
-        extrait += "..."  # Ajouter "..." si l'extrait est plus long
+        extrait += "..."
 
-    # Récupère l'URL complète de la page
     url = page.fullurl
 
-    # Envoie le résumé avec un lien vers la page
     await interaction.response.send_message(
         f"**{page.title}**\n{extrait}\n[Lire plus ici]({url})"
     )
-
 
 
 # Commande Slash pour lancer un dé
@@ -142,7 +119,6 @@ async def on_message(message):
     faim = ["j'ai faim", "faim", "j’ai la dalle", "je crève de faim", "trop faim", "je crève la dalle"]
     quoifeur = ["quoi"]
     cava = ["ca va?", "cv?", "ça va ?", "bien ou bien"]
-    caca = ["caca"]
 
 
     if any(word in content for word in salutations):
@@ -159,9 +135,6 @@ async def on_message(message):
         return
     elif any(word in content for word in cava):
         await message.reply("Moi je vait bien, comme toujours ! Et toi?")
-        return
-    elif any(word in message.content.lower() for word in caca):
-        await message.reply("💩 Voici une image pour toi :\nhttps://cdn.pixabay.com/photo/2014/02/13/11/56/wc-265278_1280.jpg")
         return
 
     await bot.process_commands(message)
@@ -262,52 +235,6 @@ async def infobot(interaction):
 
     # Envoi de l'embed
     await interaction.response.send_message(embed=embed)
-
-@bot.tree.command(name="avatar", description="Affiche l'avatar d'un membre")
-async def avatar(interaction: discord.Interaction, membre: discord.Member = None):
-    membre = membre or interaction.user
-    avatar_url = membre.avatar.url if membre.avatar else membre.default_avatar.url
-    await interaction.response.send_message(f"Avatar de {membre.display_name} : {avatar_url}")
-
-# Lancer un minuteur
-@bot.tree.command(name="minuteur", description="Lance un minuteur avec un nom personnalisé")
-async def minuteur(interaction: discord.Interaction, duree: int, nom: str):
-    await interaction.response.send_message(
-        f"⏳ Minuteur **{nom}** lancé pour {duree} minute(s), {interaction.user.mention} !"
-    )
-
-    async def timer_task():
-        try:
-            await asyncio.sleep(duree * 60)
-            await interaction.followup.send(f"⏰ Le minuteur **{nom}** est terminé, {interaction.user.mention} !")
-        except asyncio.CancelledError:
-            await interaction.followup.send(f"❌ Le minuteur **{nom}** a été annulé, {interaction.user.mention}.")
-
-    task = asyncio.create_task(timer_task())
-    active_minuteurs[interaction.user.id] = task
-
-
-@bot.tree.command(name="annule_minuteur", description="Annule ton minuteur en cours")
-async def annule_minuteur(interaction: discord.Interaction):
-    task = active_minuteurs.get(interaction.user.id)
-    if task and not task.done():
-        task.cancel()
-        await interaction.response.send_message(f"🛑 Ton minuteur a été annulé, {interaction.user.mention}.")
-        del active_minuteurs[interaction.user.id]
-    else:
-        await interaction.response.send_message("⚠️ Tu n’as pas de minuteur actif à annuler.")
-
-# Commande /dire
-@bot.command(name="dire")
-@commands.has_permissions(administrator=True)  # Vérifie si l'utilisateur est admin
-async def dire(ctx, *, message: str):
-    await ctx.send(message)  # Le bot renvoie le message
-
-# Gestion des erreurs pour la commande /dire si l'utilisateur n'est pas admin
-@dire.error
-async def dire_error(ctx, error):
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.send("Désolé, vous devez être un administrateur pour utiliser cette commande.")
 
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
