@@ -14,10 +14,7 @@ import wikipediaapi
 from discord.app_commands import MissingPermissions
 from discord.ui import View, Button
 from server import keep_alive
-import debile
-debile.setup(bot)
-import quiz
-quiz.setup(bot)
+
 
 # Charger le token depuis le fichier .env
 load_dotenv()
@@ -30,7 +27,13 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 async def on_ready():
     await bot.tree.sync()
     print(f'Connecté en tant que {bot.user} (commandes slash synchronisées)')
-
+    
+import debile
+debile.setup(bot)
+import quiz
+quiz.setup(bot)
+import mistralai
+mistralai.setup(bot)
 # Configuration des IDs (à remplacer par vos vrais IDs)
 CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')  # Utilisez une variable d'environnement
 ROLE_NOTIFS_ID = os.getenv('ROLE_NOTIFS_ID')  # Utilisez une variable d'environnement
