@@ -278,17 +278,34 @@ async def dire_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send("Désolé, vous devez être un administrateur pour utiliser cette commande.")
 
-# Fonction pour obtenir une blague de l'API
+# Fonction pour obtenir une blague de l'API (format JSON)
 def get_joke():
-    url = "https://v2.jokeapi.dev/joke/Programming,Miscellaneous?lang=fr&blacklistFlags=nsfw,religious,racist,sexist,explicit&format=txt"
+    url = "https://v2.jokeapi.dev/joke/Programming,Miscellaneous?lang=fr&blacklistFlags=nsfw,religious,racist,sexist,explicit"
     response = requests.get(url)
+    
     if response.status_code == 200:
-        return response.text
+        try:
+            joke_data = response.json()  # Essaie d'analyser la réponse JSON
+            print("Réponse JSON : ", joke_data)  # Affiche la réponse brute pour vérifier son contenu
+
+            # Vérifie si la blague est de type "single" ou "twopart"
+            if joke_data.get('type') == 'single':
+                return joke_data.get('joke', 'Désolé, je n\'ai pas trouvé de blague.')
+            elif joke_data.get('type') == 'twopart':
+                setup = joke_data.get('setup')
+                delivery = joke_data.get('delivery')
+                return f"{setup}\n{delivery}"  # Formatte la blague à deux parties
+            else:
+                return "Désolé, je n'ai pas trouvé de blague pour le moment."
+        except Exception as e:
+            print("Erreur lors de l'analyse JSON:", e)  # Affiche l'erreur en cas de problème d'analyse
+            return "Désolé, je n'ai pas pu traiter la réponse de l'API."
     else:
+        print(f"Erreur API: {response.status_code}")  # Affiche un message d'erreur si la réponse n'est pas correcte
         return "Désolé, je n'ai pas trouvé de blague pour le moment."
 
 # Commande slash !blague
-@bot.tree.command(name="blague", description="Obtiens une blague via Joke API.")
+@bot.tree.command(name="blague", description="Obtiens une blague !")
 async def blague(interaction: discord.Interaction):
     joke = get_joke()  # Récupère la blague
     embed = discord.Embed(
@@ -296,7 +313,7 @@ async def blague(interaction: discord.Interaction):
         description=joke,
         color=discord.Color.blue()
     )
-    embed.set_footer(text="Via JokeAPI | Commande : !blague")
+    embed.set_footer(text="Via JokeAPI | Commande : /blague")
     
     # Envoie la blague sous forme d'embed
     await interaction.response.send_message(embed=embed)
