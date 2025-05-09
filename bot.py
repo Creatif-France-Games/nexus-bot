@@ -118,11 +118,15 @@ async def on_message(message):
 
     content = message.content.lower()
 
-    salutations = ["salut", "bonjour", "coucou", "hi", "hola", "hello", "yo", "bonsoir", "cc", "slt", "bjr"]
+    salutations = ["salut", "bonjour", "coucou", "hi", "hola", "hello", "yo ", " yo", "bonsoir", "cc", "slt", "bjr"]
     depart = ["au revoir", "bye", "a+", "ciao", "see ya", "à bientôt", "adieu", "bonne nuit", "bn", "tchao"]
     faim = ["j'ai faim", "faim", "j’ai la dalle", "je crève de faim", "trop faim", "je crève la dalle"]
     quoifeur = ["quoi"]
     cava = ["ca va?", "cv?", "ça va ?", "bien ou bien"]
+    caca = ["caca", "crotte"]
+    rigole = ["haha", "lol", "mdr", "ptdr"]
+    musique = ["musique", "chanson", "playlist", "écouter", "chant"]
+    triste = ["triste", "déprimé", "mélancolique", "morose"]
 
 
     if any(word in content for word in salutations):
@@ -140,7 +144,20 @@ async def on_message(message):
     elif any(word in content for word in cava):
         await message.reply("Moi je vait bien, comme toujours ! Et toi?")
         return
-
+    elif any(word in content for word in caca):
+        embed = discord.Embed()
+        embed.set_image(url="https://cdn.pixabay.com/photo/2014/02/13/11/56/wc-265278_1280.jpg")
+        await message.reply(embed=embed)
+        return
+    elif any(word in content for word in rigole):
+        await message.reply("T'as l'air de bien rigoler 😄!")
+        return
+    elif any(word in content for word in musique):
+        await message.reply("Moi j'en connais une ! Never gonna give you up !")
+        return
+    elif any(word in content for word in triste):
+        await message.reply("Fait /blague pour te remonter le moral !")
+        return
     await bot.process_commands(message)
 
 
