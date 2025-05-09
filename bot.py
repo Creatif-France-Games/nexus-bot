@@ -30,7 +30,7 @@ async def on_ready():
     await main()  # Charge les extensions au démarrage
 
 def run():
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 10000)))
 
 # Utilisation de asyncio.run() pour démarrer le bot et charger les extensions
 if __name__ == "__main__":
