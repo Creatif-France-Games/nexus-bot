@@ -5,3 +5,4 @@ wikipedia-api
 requests
 yt-dlp
 discord.py[voice]
+aiohttp
