@@ -19,7 +19,6 @@ load_dotenv()
 
 # Configuration des intents
 intents = discord.Intents.all()
-client = discord.Client(intents=intents)
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 @bot.event
@@ -288,8 +287,8 @@ def get_joke():
     else:
         return "Désolé, je n'ai pas trouvé de blague pour le moment."
 
-# Création de la commande /blague
-@client.tree.command(name="blague", description="Obtiens une blague !")
+# Commande slash !blague
+@bot.tree.command(name="blague", description="Obtiens une blague !")
 async def blague(interaction: discord.Interaction):
     joke = get_joke()  # Récupère la blague
     embed = discord.Embed(
@@ -297,8 +296,9 @@ async def blague(interaction: discord.Interaction):
         description=joke,
         color=discord.Color.blue()
     )
-    embed.set_footer(text="Via JokeAPI | Commande : /blague")
+    embed.set_footer(text="Via JokeAPI | Commande : !blague")
     
+    # Envoie la blague sous forme d'embed
     await interaction.response.send_message(embed=embed)
 
 # Code déjà initialisé pour garder le bot actif via Flask
