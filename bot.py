@@ -7,6 +7,7 @@ import random
 import os
 from dotenv import load_dotenv
 import asyncio
+import aiohttp
 from discord import ui
 from discord import app_commands
 import wikipediaapi
