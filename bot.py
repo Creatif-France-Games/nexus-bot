@@ -82,13 +82,6 @@ def lire_blagues():
         blagues = f.readlines()
     return [blague.strip() for blague in blagues]
 
-# Commande Slash pour dire une blague
-@bot.tree.command(name='blague', description='Dis une blague drôle.')
-async def blague(interaction: discord.Interaction):
-    blagues = lire_blagues()  # Lit la blague
-    joke = random.choice(blagues)  # Choisir aléatoiremetn
-    await interaction.response.send_message(joke)  # Envoie la blague
-
 # Commande Slash pour changer le statut du bot
 @bot.tree.command(name='statusbot', description='Change le statut du bot avec un message personnalisé.')
 async def statusbot(interaction: discord.Interaction, statut: str):
@@ -284,6 +277,34 @@ async def dire(ctx, *, message: str):
 async def dire_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send("Désolé, vous devez être un administrateur pour utiliser cette commande.")
+
+# Fonction pour obtenir une blague de l'API
+
+def get\_joke():
+url = "[https://v2.jokeapi.dev/joke/Programming,Miscellaneous?lang=fr\&blacklistFlags=nsfw,religious,racist,sexist,explicit\&format=txt](https://v2.jokeapi.dev/joke/Programming,Miscellaneous?lang=fr&blacklistFlags=nsfw,religious,racist,sexist,explicit&format=txt)"
+response = requests.get(url)
+if response.status\_code == 200:
+return response.text
+else:
+return "Désolé, je n'ai pas trouvé de blague pour le moment."
+
+# Création de la commande /blague
+
+@client.tree.command(name="blague", description="Obtiens une blague !")
+async def blague(interaction: discord.Interaction):
+joke = get\_joke()  # Récupère la blague
+embed = discord.Embed(
+title="Blague du jour",
+description=joke,
+color=discord.Color.blue()
+)
+embed.set\_footer(text="Via JokeAPI | Commande : /blague")
+
+```
+await interaction.response.send_message(embed=embed)
+```
+
+
 
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
