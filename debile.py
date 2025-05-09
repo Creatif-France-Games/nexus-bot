@@ -67,6 +67,7 @@ async def debile(interaction: discord.Interaction):
 
 # Configuration de la commande
 def setup(bot):
-    @bot.tree.command(name="debile", description="Génère une phrase complètement débile", guild_ids=[1281639178689319067])
+    @bot.tree.command(name="debile", description="Génère une phrase complètement débile")
     async def debile_command(interaction: discord.Interaction):
         await debile(interaction)
+
