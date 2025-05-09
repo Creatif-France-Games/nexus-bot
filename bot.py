@@ -288,7 +288,7 @@ def get_joke():
         return "Désolé, je n'ai pas trouvé de blague pour le moment."
 
 # Commande slash !blague
-@bot.tree.command(name="blague", description="Obtiens une blague !")
+@bot.tree.command(name="blague", description="Obtiens une blague via Joke API.")
 async def blague(interaction: discord.Interaction):
     joke = get_joke()  # Récupère la blague
     embed = discord.Embed(
