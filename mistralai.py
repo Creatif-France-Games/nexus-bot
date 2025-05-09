@@ -32,7 +32,6 @@ class MistralAI(commands.Cog):
         except Exception as e:
             await interaction.followup.send(f"Erreur : {str(e)}")
 
-async def setup(bot):
-    await bot.add_cog(MistralAI(bot))
-
-
+# Retirer l'await ici, juste un appel classique
+def setup(bot):
+    bot.add_cog(MistralAI(bot))
