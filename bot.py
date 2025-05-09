@@ -278,45 +278,31 @@ async def dire_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send("Désolé, vous devez être un administrateur pour utiliser cette commande.")
 
-# Fonction pour obtenir une blague de l'API (format JSON)
-def get_joke():
+# Fonction asynchrone pour obtenir une blague en JSON
+async def get_joke():
     url = "https://v2.jokeapi.dev/joke/Programming,Miscellaneous?lang=fr&blacklistFlags=nsfw,religious,racist,sexist,explicit"
-    response = requests.get(url)
-    
-    if response.status_code == 200:
-        try:
-            joke_data = response.json()  # Essaie d'analyser la réponse JSON
-            print("Réponse JSON : ", joke_data)  # Affiche la réponse brute pour vérifier son contenu
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                data = await response.json()
+                if data.get("type") == "single":
+                    return data.get("joke")
+                elif data.get("type") == "twopart":
+                    return f"{data.get('setup')}\n{data.get('delivery')}"
+            return "Impossible de récupérer une blague."
 
-            # Vérifie si la blague est de type "single" ou "twopart"
-            if joke_data.get('type') == 'single':
-                return joke_data.get('joke', 'Désolé, je n\'ai pas trouvé de blague.')
-            elif joke_data.get('type') == 'twopart':
-                setup = joke_data.get('setup')
-                delivery = joke_data.get('delivery')
-                return f"{setup}\n{delivery}"  # Formatte la blague à deux parties
-            else:
-                return "Désolé, je n'ai pas trouvé de blague pour le moment."
-        except Exception as e:
-            print("Erreur lors de l'analyse JSON:", e)  # Affiche l'erreur en cas de problème d'analyse
-            return "Désolé, je n'ai pas pu traiter la réponse de l'API."
-    else:
-        print(f"Erreur API: {response.status_code}")  # Affiche un message d'erreur si la réponse n'est pas correcte
-        return "Désolé, je n'ai pas trouvé de blague pour le moment."
-
-# Commande slash !blague
+# Slash command qui fonctionne vraiment
 @bot.tree.command(name="blague", description="Obtiens une blague !")
 async def blague(interaction: discord.Interaction):
-    joke = get_joke()  # Récupère la blague
+    await interaction.response.defer()  # évite le timeout Discord
+    joke = await get_joke()
     embed = discord.Embed(
         title="Blague du jour",
         description=joke,
-        color=discord.Color.blue()
+        color=discord.Color.orange()
     )
-    embed.set_footer(text="Via JokeAPI | Commande : /blague")
-    
-    # Envoie la blague sous forme d'embed
-    await interaction.response.send_message(embed=embed)
+    embed.set_footer(text="Via JokeAPI | /blague")
+    await interaction.followup.send(embed=embed)
 
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
