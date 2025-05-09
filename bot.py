@@ -1,3 +1,6 @@
+# Créé par la Team CF Games avec l'aide de GPT.
+# Sous license CC-BY, voir le fichier LICENSE
+# (c) Team CF Games 2025
 import discord
 from discord.ext import commands
 import random
@@ -235,6 +238,52 @@ async def infobot(interaction):
 
     # Envoi de l'embed
     await interaction.response.send_message(embed=embed)
+
+@bot.tree.command(name="avatar", description="Affiche l'avatar d'un membre")
+async def avatar(interaction: discord.Interaction, membre: discord.Member = None):
+    membre = membre or interaction.user
+    avatar_url = membre.avatar.url if membre.avatar else membre.default_avatar.url
+    await interaction.response.send_message(f"Avatar de {membre.display_name} : {avatar_url}")
+
+# Lancer un minuteur
+@bot.tree.command(name="minuteur", description="Lance un minuteur avec un nom personnalisé")
+async def minuteur(interaction: discord.Interaction, duree: int, nom: str):
+    await interaction.response.send_message(
+        f"⏳ Minuteur **{nom}** lancé pour {duree} minute(s), {interaction.user.mention} !"
+    )
+
+    async def timer_task():
+        try:
+            await asyncio.sleep(duree * 60)
+            await interaction.followup.send(f"⏰ Le minuteur **{nom}** est terminé, {interaction.user.mention} !")
+        except asyncio.CancelledError:
+            await interaction.followup.send(f"❌ Le minuteur **{nom}** a été annulé, {interaction.user.mention}.")
+
+    task = asyncio.create_task(timer_task())
+    active_minuteurs[interaction.user.id] = task
+
+
+@bot.tree.command(name="annule_minuteur", description="Annule ton minuteur en cours")
+async def annule_minuteur(interaction: discord.Interaction):
+    task = active_minuteurs.get(interaction.user.id)
+    if task and not task.done():
+        task.cancel()
+        await interaction.response.send_message(f"🛑 Ton minuteur a été annulé, {interaction.user.mention}.")
+        del active_minuteurs[interaction.user.id]
+    else:
+        await interaction.response.send_message("⚠️ Tu n’as pas de minuteur actif à annuler.")
+
+# Commande /dire
+@bot.command(name="dire")
+@commands.has_permissions(administrator=True)  
+async def dire(ctx, *, message: str):
+    await ctx.send(message)  
+
+# Gestion des erreurs pour la commande /dire si l'utilisateur n'est pas admin
+@dire.error
+async def dire_error(ctx, error):
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send("Désolé, vous devez être un administrateur pour utiliser cette commande.")
 
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
