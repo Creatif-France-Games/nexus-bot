@@ -275,10 +275,10 @@ async def annule_minuteur(interaction: discord.Interaction):
         await interaction.response.send_message("⚠️ Tu n’as pas de minuteur actif à annuler.")
 
 # Commande /dire
-@bot.command(name="dire")
-@commands.has_permissions(administrator=True)  
-async def dire(ctx, *, message: str):
-    await ctx.send(message)  
+@bot.tree.command(name="dire", description="Envoie un message personnalisé dans le canal.")
+@app_commands.checks.has_permissions(administrator=True)
+async def dire(interaction: discord.Interaction, message: str):
+    await interaction.response.send_message(message) 
 
 # Gestion des erreurs pour la commande /dire si l'utilisateur n'est pas admin
 @dire.error
@@ -311,6 +311,202 @@ async def blague(interaction: discord.Interaction):
     )
     embed.set_footer(text="Via JokeAPI | /blague")
     await interaction.followup.send(embed=embed)
+
+@bot.tree.command(name="embed", description="Envoie un message sous forme d'embed avec une couleur bleue.")
+@app_commands.checks.has_permissions(administrator=True)
+async def embed(interaction: discord.Interaction, titre: str, description: str):
+    # Crée un embed avec les informations fournies
+    embed = discord.Embed(
+        title=titre,
+        description=description,
+        color=discord.Color.blue()  # Couleur bleue
+    )
+    
+    # Envoie l'embed dans le canal
+    await interaction.response.send_message(embed=embed)
+
+@embed.error
+async def embed_error(interaction: discord.Interaction, error):
+    if isinstance(error, app_commands.MissingPermissions):
+        await interaction.response.send_message(
+            "Désolé, vous devez être un administrateur pour utiliser cette commande.",
+            ephemeral=True  # Message visible uniquement par l'utilisateur
+        )
+
+@bot.tree.command(name="bannir", description="Bannir un utilisateur avec une raison.")
+@app_commands.checks.has_permissions(administrator=True)
+async def bannir(interaction: discord.Interaction, membre: discord.Member, raison: str):
+    try:
+        # Envoi du message privé à l'utilisateur banni
+        await membre.send(f"Vous avez été banni du serveur **{interaction.guild.name}** pour la raison suivante : {raison}")
+    except discord.Forbidden:
+        # Si l'utilisateur a les MP désactivés ou bloqués
+        await interaction.response.send_message(
+            f"Impossible d'envoyer un message privé à {membre.display_name}, mais il sera quand même banni.",
+            ephemeral=True
+        )
+    except Exception as e:
+        # Gestion des autres erreurs
+        await interaction.response.send_message(
+            f"Une erreur inattendue s'est produite : {e}",
+            ephemeral=True
+        )
+        return
+
+    # Bannir l'utilisateur
+    await interaction.guild.ban(membre, reason=raison)
+    
+    # Répondre dans le canal
+    await interaction.response.send_message(f"{membre.display_name} a été banni pour la raison suivante : {raison}")
+
+@bot.tree.command(name="kick", description="Expulse un utilisateur du serveur avec une raison.")
+@app_commands.checks.has_permissions(administrator=True)
+async def kick(interaction: discord.Interaction, membre: discord.Member, raison: str):
+    try:
+        # Envoi du message privé à l'utilisateur expulsé
+        await membre.send(f"Vous avez été expulsé du serveur **{interaction.guild.name}** pour la raison suivante : {raison}")
+    except discord.Forbidden:
+        # Si l'utilisateur a les MP désactivés ou bloqués
+        await interaction.response.send_message(
+            f"Impossible d'envoyer un message privé à {membre.display_name}, mais il sera quand même expulsé.",
+            ephemeral=True
+        )
+    except Exception as e:
+        # Gestion des autres erreurs
+        await interaction.response.send_message(
+            f"Une erreur inattendue s'est produite : {e}",
+            ephemeral=True
+        )
+        return
+
+    # Expulser l'utilisateur
+    await interaction.guild.kick(membre, reason=raison)
+    
+    # Répondre dans le canal
+    await interaction.response.send_message(f"{membre.display_name} a été expulsé pour la raison suivante : {raison}")
+@bot.tree.command(name="infoserveur", description="Affiche des informations détaillées sur le serveur.")
+async def infoserveur(interaction: discord.Interaction):
+    # Récupérer les informations sur le serveur
+    guild = interaction.guild
+    nom_serveur = guild.name
+    proprietaire = guild.owner
+    date_creation = guild.created_at.strftime("%d %B %Y à %H:%M:%S")
+    nombre_membres = len(guild.members)
+    nombre_bots = len([membre for membre in guild.members if membre.bot])
+    nombre_humains = nombre_membres - nombre_bots
+    roles = [role.mention for role in guild.roles if role.name != "@everyone"]  # Exclure @everyone
+    emojis = [str(emoji) for emoji in guild.emojis]
+    niveau_boost = guild.premium_tier
+    boosts = guild.premium_subscription_count
+
+    # Créer un embed pour afficher les informations
+    embed = discord.Embed(
+        title=f"Informations sur le serveur : {nom_serveur}",
+        color=discord.Color.blue()
+    )
+    embed.add_field(name="Propriétaire", value=proprietaire.mention, inline=False)
+    embed.add_field(name="Date de création", value=date_creation, inline=False)
+    embed.add_field(name="Membres", value=f"Total : {nombre_membres}\nHumains : {nombre_humains}\nBots : {nombre_bots}", inline=False)
+    embed.add_field(name="Niveau de boost", value=f"Niveau {niveau_boost} ({boosts} boosts)", inline=False)
+    embed.add_field(name="Rôles", value=", ".join(roles) if roles else "Aucun rôle", inline=False)
+    embed.add_field(name="Emojis", value=", ".join(emojis) if emojis else "Aucun emoji", inline=False)
+
+    # Envoyer l'embed
+    await interaction.response.send_message(embed=embed)
+
+@bot.tree.command(name="infomembre", description="Affiche des informations sur un membre du serveur.")
+async def infomembre(interaction: discord.Interaction, membre: discord.Member):
+    # Récupérer les informations du membre
+    nom = membre.name
+    pseudo = membre.nick if membre.nick else "Aucun"
+    date_creation_discord = membre.created_at.strftime("%d %B %Y à %H:%M:%S")
+    date_rejoignage_serveur = membre.joined_at.strftime("%d %B %Y à %H:%M:%S") if membre.joined_at else "Inconnu"
+    roles = [role.mention for role in membre.roles if role.name != "@everyone"]
+
+    # Créer un embed pour afficher les informations
+    embed = discord.Embed(
+        title=f"Informations sur {nom}",
+        color=discord.Color.blue()
+    )
+    embed.add_field(name="Nom", value=nom, inline=False)
+    embed.add_field(name="Pseudo (dans le serveur)", value=pseudo, inline=False)
+    embed.add_field(name="Date de création du compte Discord", value=date_creation_discord, inline=False)
+    embed.add_field(name="Date de rejoignage du serveur", value=date_rejoignage_serveur, inline=False)
+    embed.add_field(name="Rôles", value=", ".join(roles) if roles else "Aucun rôle", inline=False)
+
+    # Envoyer l'embed
+    await interaction.response.send_message(embed=embed)
+
+import datetime
+
+@bot.tree.command(name="mute", description="Rend un membre muet pour une durée spécifiée.")
+@app_commands.checks.has_permissions(administrator=True)
+async def mute(interaction: discord.Interaction, membre: discord.Member, duree: int):
+    # Vérifie si le rôle "Muted" existe
+    mute_role = discord.utils.get(interaction.guild.roles, name="Muted")
+    if not mute_role:
+        await interaction.response.send_message(
+            "Le rôle 'Muted' n'existe pas. Veuillez le créer et configurer ses permissions.",
+            ephemeral=True
+        )
+        return
+
+    # Ajoute le rôle "Muted" au membre
+    await membre.add_roles(mute_role, reason=f"Muted par {interaction.user} pour {duree} minutes")
+    await interaction.response.send_message(
+        f"{membre.mention} a été rendu muet pour {duree} minutes.",
+        ephemeral=False
+    )
+
+    # Planifie la suppression du rôle après la durée spécifiée
+    await asyncio.sleep(duree * 60)  # Convertit la durée de minutes en secondes
+    if mute_role in membre.roles:
+        await membre.remove_roles(mute_role, reason="Durée de mute expirée")
+        try:
+            await membre.send(f"Vous n'êtes plus muet sur le serveur **{interaction.guild.name}**.")
+        except discord.Forbidden:
+            pass  # Si l'utilisateur a désactivé les MP
+
+@bot.tree.command(name="qr", description="Génère un code QR à partir d'un texte ou d'une URL.")
+async def qr(interaction: discord.Interaction, texte: str):
+    # URL de l'API pour générer le code QR
+    qr_url = f"https://quickchart.io/qr?text={texte}"
+    
+    # Créer un embed avec le code QR
+    embed = discord.Embed(
+        title="Code QR généré",
+        description=f"Voici votre code QR pour : `{texte}`",
+        color=discord.Color.blue()
+    )
+    embed.set_image(url=qr_url)  # Ajoute l'image du QR code
+    embed.set_footer(text="Généré avec QuickChart.io")
+    
+    # Envoie l'embed
+    await interaction.response.send_message(embed=embed)
+
+@bot.tree.command(name="bombe", description="Effectue un compte à rebours avant une explosion.")
+async def bombe(interaction: discord.Interaction):
+    await interaction.response.defer()  # Évite le timeout Discord pour les longues tâches
+    
+    # Liste du compte à rebours
+    countdown = ["5", "4", "3", "2", "1"]
+    
+    # Message initial
+    message = await interaction.followup.send("Ça va exploser : 5")
+    await asyncio.sleep(1)
+    
+    # Modifier le message pour chaque étape du compte à rebours
+    for i in range(1, len(countdown)):
+        await message.edit(content=f"Ça va exploser : {countdown[i]}")
+        await asyncio.sleep(1)
+    
+    # Remplace le message par le GIF de l'explosion
+    await message.edit(content="💥 BOUM 💥\nhttps://c.tenor.com/uBrOl8WjH-EAAAAd/tenor.gif")
+    await asyncio.sleep(3)
+    
+    # Supprime le message
+    await message.delete()
+
 
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
