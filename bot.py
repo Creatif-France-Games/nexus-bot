@@ -29,6 +29,9 @@ async def on_ready():
     print(f"Connecté en tant que {bot.user}")
     await main()  # Charge les extensions au démarrage
 
+def run():
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
+
 # Utilisation de asyncio.run() pour démarrer le bot et charger les extensions
 if __name__ == "__main__":
     asyncio.run(bot.start(os.getenv("DISCORD_TOKEN")))  # Utilisation de asyncio.run() ici
