@@ -19,6 +19,7 @@ load_dotenv()
 
 # Configuration des intents
 intents = discord.Intents.all()
+client = discord.Client(intents=intents)
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 @bot.event
