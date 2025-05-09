@@ -14,6 +14,10 @@ import wikipediaapi
 from discord.app_commands import MissingPermissions
 from discord.ui import View, Button
 from server import keep_alive
+import debile
+debile.setup(bot)
+import quiz
+quiz.setup(bot)
 
 # Charger le token depuis le fichier .env
 load_dotenv()
