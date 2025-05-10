@@ -524,6 +524,39 @@ async def bombe(interaction: discord.Interaction):
     # Supprime le message
     await message.delete()
 
+# Commande Slash pour récupérer la température
+@bot.tree.command(name="temperature", description="Affiche la température d'une ville.")
+@app_commands.describe(ville="La ville pour laquelle afficher la température.")
+async def temperature(interaction: discord.Interaction, ville: str):
+    # Construire l'URL de l'API
+    url = f"https://wttr.in/{ville}?format=%t"
+
+    try:
+        # Envoyer la requête à l'API
+        response = requests.get(url)
+        if response.status_code == 200:
+            temperature = response.text.strip()  # Récupérer la température (nettoyer les espaces)
+            
+            # Créer un embed bleu
+            embed = discord.Embed(
+                title=f"Température de {ville.capitalize()}",
+                description=f"**{temperature}**",
+                color=discord.Color.blue()
+            )
+            embed.set_footer(text="Via l'API wttr.in")
+
+            # Envoyer l'embed
+            await interaction.response.send_message(embed=embed)
+        else:
+            await interaction.response.send_message(
+                f"❌ Impossible de récupérer la température pour **{ville}**. Vérifiez l'orthographe ou réessayez plus tard.",
+                ephemeral=True
+            )
+    except Exception as e:
+        await interaction.response.send_message(
+            f"❌ Une erreur est survenue en récupérant la température : {str(e)}",
+            ephemeral=True
+        )
 
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
