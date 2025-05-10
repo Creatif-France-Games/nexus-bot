@@ -8,6 +8,7 @@ import os
 from dotenv import load_dotenv
 import asyncio
 import aiohttp
+import requests
 from discord import ui
 from discord import app_commands
 import wikipediaapi
@@ -555,6 +556,32 @@ async def temperature(interaction: discord.Interaction, ville: str):
     except Exception as e:
         await interaction.response.send_message(
             f"❌ Une erreur est survenue en récupérant la température : {str(e)}",
+            ephemeral=True
+        )
+
+# Commande Slash pour Rickroll
+@bot.tree.command(name="rickroll", description="Envoie un Rickroll en message privé à un membre.")
+@app_commands.describe(membre="Le membre à Rickroller.")
+async def rickroll(interaction: discord.Interaction, membre: discord.Member):
+    try:
+        # Message Rickroll
+        message = f"La personne {interaction.user.display_name} souhaite te partager cette vidéo : <https://youtu.be/dQw4w9WgXcQ?si=Hpc6awRKbIBqN3ws>"
+        
+        # Envoyer un message privé au membre
+        await membre.send(message)
+        
+        # Répondre dans le salon pour confirmer l'envoi
+        await interaction.response.send_message(f"Rickroll envoyé à {membre.display_name} !", ephemeral=True)
+    except discord.Forbidden:
+        # Si l'utilisateur a désactivé les MP
+        await interaction.response.send_message(
+            f"Impossible d'envoyer un message privé à {membre.display_name}.",
+            ephemeral=True
+        )
+    except Exception as e:
+        # Gestion des autres erreurs
+        await interaction.response.send_message(
+            f"Une erreur inattendue s'est produite : {str(e)}",
             ephemeral=True
         )
 
