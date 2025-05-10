@@ -585,6 +585,38 @@ async def rickroll(interaction: discord.Interaction, membre: discord.Member):
             ephemeral=True
         )
 
+# Commande Slash pour un exercice de respiration
+@bot.tree.command(name="respiration_exercice", description="Lance un exercice de respiration guidée (1 minute).")
+async def respiration_exercice(interaction: discord.Interaction):
+    try:
+        # Informer l'utilisateur que l'exercice va commencer
+        await interaction.response.send_message("Préparez-vous... L'exercice de respiration va commencer dans 5 secondes !")
+        await asyncio.sleep(5)  # Pause initiale de 5 secondes
+
+        # Variables pour contrôler le temps de l'exercice
+        total_duration = 60  # Durée totale de l'exercice en secondes
+        cycle_duration = 19  # Durée d'un cycle complet (inspirez 5s + expirez 5s + attendez 4s)
+        cycles = total_duration // cycle_duration  # Nombre total de cycles (60 / 19)
+
+        # Lancer l'exercice de respiration
+        for cycle in range(cycles):
+            for phase, phase_text, duration in [
+                ("inspirez", "Inspirez...", 5),
+                ("expirez", "Expirez...", 5),
+                ("attendez", "Attendez...", 4),
+            ]:
+                # Créer un compte à rebours pour chaque étape
+                for countdown in range(duration, 0, -1):
+                    await interaction.channel.send(f"**{countdown}** {phase_text}")
+                    await asyncio.sleep(1)
+
+        # Fin de l'exercice
+        await interaction.channel.send("🎉 Exercice de respiration terminé ! Bravo ! 🎉")
+
+    except Exception as e:
+        # Gestion des erreurs
+        await interaction.followup.send(f"❌ Une erreur est survenue pendant l'exercice : {str(e)}", ephemeral=True)
+
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
 
