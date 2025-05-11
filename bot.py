@@ -15,6 +15,7 @@ import wikipediaapi
 from discord.app_commands import MissingPermissions
 from discord.ui import View, Button
 from server import keep_alive
+import youtube_dl  # Nécessaire pour gérer les streams audio
 
 
 # Charger le token depuis le fichier .env
@@ -616,6 +617,59 @@ async def respiration_exercice(interaction: discord.Interaction):
     except Exception as e:
         # Gestion des erreurs
         await interaction.followup.send(f"❌ Une erreur est survenue pendant l'exercice : {str(e)}", ephemeral=True)
+
+# Commande Slash pour jouer une radio
+@bot.tree.command(name="radio", description="Joue une station de radio dans votre salon vocal.")
+@app_commands.describe(radio="Le nom de la station de radio.")
+async def radio(interaction: discord.Interaction, radio: str):
+    # Vérifiez si l'utilisateur est dans un salon vocal
+    if not interaction.user.voice or not interaction.user.voice.channel:
+        await interaction.response.send_message("❌ Vous devez être dans un salon vocal pour utiliser cette commande.", ephemeral=True)
+        return
+
+    # Rejoindre le salon vocal
+    voice_channel = interaction.user.voice.channel
+    voice_client = await voice_channel.connect()
+
+    # Récupérer la liste des radios via l'API Radio-Browser
+    url = "https://de1.api.radio-browser.info/json/stations/bycountry/France"
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status != 200:
+                await interaction.response.send_message("❌ Impossible de récupérer les stations de radio. Réessayez plus tard.", ephemeral=True)
+                return
+
+            radios = await response.json()
+            # Trouver la radio correspondante
+            station = next((r for r in radios if radio.lower() in r["name"].lower()), None)
+            if not station:
+                await interaction.response.send_message(f"❌ La station de radio `{radio}` est introuvable.", ephemeral=True)
+                await voice_client.disconnect()
+                return
+
+            stream_url = station["url"]
+            await interaction.response.send_message(f"🎵 Lecture de `{station['name']}` dans {voice_channel.name}...")
+
+            # Jouer le stream audio
+            try:
+                ydl_opts = {"format": "bestaudio/best", "quiet": True}
+                ffmpeg_opts = {
+                    "options": "-vn",
+                }
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    info = ydl.extract_info(stream_url, download=False)
+                    url2play = info["url"]
+
+                voice_client.play(discord.FFmpegPCMAudio(url2play, **ffmpeg_opts))
+            except Exception as e:
+                await interaction.response.send_message(f"❌ Une erreur s'est produite en jouant la radio : {e}", ephemeral=True)
+                await voice_client.disconnect()
+                return
+
+            # Déconnecter après la fin
+            while voice_client.is_playing():
+                await asyncio.sleep(1)
+            await voice_client.disconnect()
 
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
