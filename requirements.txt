@@ -1,7 +1,7 @@
 discord.py
 flask
 python-dotenv
-wikipedia-api
+wikipediaapi
 requests
 yt-dlp
 discord.py[voice]
