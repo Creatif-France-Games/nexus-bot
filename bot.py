@@ -58,7 +58,7 @@ COMPLIMENTS = [
 @bot.tree.command(name='wikipedia', description='Fais une recherche sur Wikipédia.')
 async def wikipedia(interaction: discord.Interaction, recherche: str):
     recherche = recherche.strip()  # Nettoyer l'entrée utilisateur
-    wiki = wikipedia-api.Wikipedia('fr')  # ou 'en' pour l'anglais
+    wiki = wikipediaapi.Wikipedia('fr')  # ou 'en' pour l'anglais
 
     page = wiki.page(recherche)
 
