@@ -11,7 +11,6 @@ import aiohttp
 import requests
 from discord import ui
 from discord import app_commands
-import wikipediaapi
 from discord.app_commands import MissingPermissions
 from discord.ui import View, Button
 from server import keep_alive
@@ -53,31 +52,6 @@ COMPLIMENTS = [
     "{member.display_name}, ton énergie est contagieuse ! ⚡",
     "{member.display_name}, t'es une personne vraiment cool et positive ! 😎"
 ]
-
-#Commande /wikipedia (en test, marche pas trop je crois)
-@bot.tree.command(name='wikipedia', description='Fais une recherche sur Wikipédia.')
-async def wikipedia(interaction: discord.Interaction, recherche: str):
-    recherche = recherche.strip()  # Nettoyer l'entrée utilisateur
-    wiki = wikipediaapi.Wikipedia('fr')  # ou 'en' pour l'anglais
-
-    page = wiki.page(recherche)
-
-    if not page.exists():
-        await interaction.response.send_message(
-            f"Aucune page trouvée pour : **{recherche}**. Essayez un autre mot-clé ou vérifiez l'orthographe.",
-            ephemeral=True
-        )
-        return
-
-    extrait = page.summary[0:1000]
-    if len(page.summary) > 1000:
-        extrait += "..."
-
-    url = page.fullurl
-
-    await interaction.response.send_message(
-        f"**{page.title}**\n{extrait}\n[Lire plus ici]({url})"
-    )
 
 
 # Commande Slash pour lancer un dé
