@@ -671,6 +671,20 @@ async def radio(interaction: discord.Interaction, radio: str):
                 await asyncio.sleep(1)
             await voice_client.disconnect()
 
+# embed des serveurs
+@bot.tree.command(name="serveurs", description="Affiche les serveurs MultiCraft de CF Games.")
+async def infobot(interaction):
+
+    embed = discord.Embed(
+        title="Serveurs",
+        description="Veloria (Code d'invitation : X72KP62P)\n\Créatif France (Code d'invitation : 432IBSK4)",
+        color=discord.Color.blue() 
+    )
+    embed.set_footer(text="Serveurs de CF Games")
+
+    # Envoi de l'embed
+    await interaction.response.send_message(embed=embed)
+
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
 
