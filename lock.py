@@ -1,3 +1,7 @@
+import discord
+from discord.ext import commands
+from discord import app_commands
+
 @bot.tree.command(name="verrouiller", description="Verrouille un salon.")
 async def verrouiller(interaction: discord.Interaction, channel: discord.TextChannel, duration: str = None, reason: str = "Ce salon est verrouillé."):
     # check permissions à la main
