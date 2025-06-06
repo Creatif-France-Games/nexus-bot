@@ -1,4 +1,4 @@
-# Créé par la Team CF Games avec l'aide de GPT.
+# Créé par la Team CF Games avec l'aide de l'IA
 # Sous license CC-BY, voir le fichier LICENSE
 # (c) Team CF Games 2025
 import discord
