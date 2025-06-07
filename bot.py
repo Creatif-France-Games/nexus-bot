@@ -36,8 +36,6 @@ import quiz
 quiz.setup(bot)
 import mistralai
 mistralai.setup(bot)
-import lock
-lock.setup(bot)
 # Configuration des IDs (à remplacer par vos vrais IDs)
 CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')  # Utilisez une variable d'environnement
 ROLE_NOTIFS_ID = os.getenv('ROLE_NOTIFS_ID')  # Utilisez une variable d'environnement
