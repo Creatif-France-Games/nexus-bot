@@ -660,6 +660,16 @@ async def infobot(interaction):
     # Envoi de l'embed
     await interaction.response.send_message(embed=embed)
 
+@bot.tree.command(name="clear", description="Supprime des messages.")
+async def clear(interaction: discord.Interaction, amount: int):
+    if not interaction.user.guild_permissions.manage_messages:
+        await interaction.response.send_message("T'as pas les permitions... 😬", ephemeral=True)
+        return
+
+    await interaction.channel.purge(limit=amount)
+    await interaction.response.send_message(f"{amount} messages supprimés", ephemeral=True)
+
+
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
 
