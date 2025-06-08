@@ -669,6 +669,54 @@ async def clear(interaction: discord.Interaction, amount: int):
     await interaction.channel.purge(limit=amount)
     await interaction.response.send_message(f"{amount} messages supprimés", ephemeral=True)
 
+@bot.tree.command(name="8ball", description="Pose ta question, la boule magique répond.")
+async def ball(interaction: discord.Interaction, question: str):
+    import random
+    réponses = ["Oui", "Non", "Peut-être", "Demande à ton chat", "Jamais", "Carrément"]
+    await interaction.response.send_message(f"🎱 {random.choice(réponses)}")
+
+@bot.tree.command(name="devine", description="Devine un nombre entre 1 et 10.")
+async def devine(interaction: discord.Interaction, nombre: int):
+    import random
+    secret = random.randint(1, 10)
+    if nombre == secret:
+        await interaction.response.send_message("🔮 Bien joué, t'as deviné !")
+    else:
+        await interaction.response.send_message(f"Raté ! C'était {secret}")
+
+@bot.tree.command(name="pileface", description="Pile ou face !")
+async def pileface(interaction: discord.Interaction):
+    import random
+    résultat = random.choice(["Pile", "Face"])
+    await interaction.response.send_message(f"🪙 Résultat : {résultat}")
+
+@bot.tree.command(name="chifoumi", description="Pierre, Feuille ou Ciseaux contre le bot.")
+async def chifoumi(interaction: discord.Interaction, choix: str):
+    import random
+    choix = choix.lower()
+    options = ["pierre", "feuille", "ciseaux"]
+    bot_choix = random.choice(options)
+    
+    if choix not in options:
+        await interaction.response.send_message("Choix invalide mec. Tape pierre, feuille ou ciseaux.")
+        return
+
+    résultat = {
+        ("pierre", "ciseaux"): "Gagné !",
+        ("feuille", "pierre"): "Gagné !",
+        ("ciseaux", "feuille"): "Gagné !",
+    }
+
+    if choix == bot_choix:
+        msg = f"Égalité ! On a tous les deux choisi {choix}."
+    elif (choix, bot_choix) in résultat:
+        msg = f"Tu gagnes ! ({choix} bat {bot_choix})"
+    else:
+        msg = f"Perdu ! ({bot_choix} bat {choix})"
+
+    await interaction.response.send_message(msg)
+
+
 
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
