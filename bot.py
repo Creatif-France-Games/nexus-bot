@@ -20,6 +20,9 @@ import youtube_dl  # Nécessaire pour gérer les streams audio
 # Charger le token depuis le fichier .env
 load_dotenv()
 
+# Dictionnaire pour suivre les salons privés temporaires des utilisateurs
+user_private_channels = {}
+
 # Configuration des intents
 intents = discord.Intents.all()
 intents.message_content = True
@@ -716,6 +719,99 @@ async def chifoumi(interaction: discord.Interaction, choix: str):
 
     await interaction.response.send_message(msg)
 
+@bot.tree.command(name="spam", description="Spammer 50 fois 'TEST SPAM' pour tester les protections anti-spam (réservé aux admins).")
+@app_commands.checks.has_permissions(administrator=True)
+async def spam(interaction: discord.Interaction):
+    await interaction.response.send_message("Début du test de spam...", ephemeral=True)
+
+    # Envoyer 50 messages "TEST SPAM"
+    for _ in range(50):
+        await interaction.channel.send("TEST SPAM")
+
+@spam.error
+async def spam_error(interaction: discord.Interaction, error):
+    if isinstance(error, app_commands.MissingPermissions):
+        await interaction.response.send_message(
+            "❌ Vous devez être administrateur pour utiliser cette commande.",
+            ephemeral=True
+        )
+
+@bot.tree.command(name="salon_prive_temporaire", description="Créer un salon textuel temporaire (effacé après 1 heure).")
+async def salon_prive_temporaire(interaction: discord.Interaction, nom_salon: str):
+    user_id = interaction.user.id
+
+    # Vérifier si l'utilisateur a déjà 2 salons privés
+    if user_id in user_private_channels and len(user_private_channels[user_id]) >= 2:
+        await interaction.response.send_message(
+            "❌ Vous avez atteint la limite de 2 salons privés. Veuillez supprimer un salon existant avant d'en créer un nouveau.",
+            ephemeral=True
+        )
+        return
+
+    # Créer un salon privé dans la catégorie "Salons Privés" (à configurer selon votre serveur)
+    category = discord.utils.get(interaction.guild.categories, name="Salons Privés")
+    if not category:
+        await interaction.response.send_message(
+            "❌ La catégorie 'Salons Privés' n'existe pas. Veuillez la créer ou demander à un administrateur de l'ajouter.",
+            ephemeral=True
+        )
+        return
+
+    # Créer le salon
+    channel = await interaction.guild.create_text_channel(
+        name=nom_salon,
+        category=category,
+        overwrites={
+            interaction.guild.default_role: discord.PermissionOverwrite(read_messages=False),
+            interaction.user: discord.PermissionOverwrite(read_messages=True, send_messages=True),
+        }
+    )
+
+    # Ajouter le salon au dictionnaire
+    if user_id not in user_private_channels:
+        user_private_channels[user_id] = []
+    user_private_channels[user_id].append(channel.id)
+
+    # Planifier la suppression du salon après 1 heure
+    await interaction.response.send_message(
+        f"✅ Salon privé temporaire **{nom_salon}** créé avec succès. Il sera supprimé automatiquement après 1 heure.",
+        ephemeral=True
+    )
+    await asyncio.sleep(3600)  # 1 heure en secondes
+    await channel.delete()
+    user_private_channels[user_id].remove(channel.id)
+
+    # Nettoyer le dictionnaire si aucun salon n'existe
+    if not user_private_channels[user_id]:
+        del user_private_channels[user_id]
+
+@bot.tree.command(name="ajouter_membre_salon", description="Ajouter un membre à votre salon privé temporaire.")
+async def ajouter_membre_salon(interaction: discord.Interaction, salon_id: int, membre: discord.Member):
+    user_id = interaction.user.id
+
+    # Vérifier si le salon appartient à l'utilisateur
+    if user_id not in user_private_channels or salon_id not in user_private_channels[user_id]:
+        await interaction.response.send_message(
+            "❌ Ce salon ne vous appartient pas ou n'existe pas.",
+            ephemeral=True
+        )
+        return
+
+    # Récupérer le salon
+    channel = interaction.guild.get_channel(salon_id)
+    if not channel:
+        await interaction.response.send_message(
+            "❌ Le salon spécifié est introuvable.",
+            ephemeral=True
+        )
+        return
+
+    # Ajouter les permissions au membre
+    await channel.set_permissions(membre, read_messages=True, send_messages=True)
+    await interaction.response.send_message(
+        f"✅ {membre.mention} a été ajouté au salon privé temporaire **{channel.name}**.",
+        ephemeral=True
+    )
 
 
 # Code déjà initialisé pour garder le bot actif via Flask
