@@ -22,12 +22,15 @@ load_dotenv()
 
 # Dictionnaire pour suivre les salons privés temporaires des utilisateurs
 user_private_channels = {}
+locked_channels = {}
+secure_mode = False
 
 # Configuration des intents
 intents = discord.Intents.all()
 intents.message_content = True
 intents.members = True
 bot = commands.Bot(command_prefix='!', intents=intents)
+tree = bot.tree
 @bot.event
 async def on_ready():
     await bot.tree.sync()
@@ -813,6 +816,67 @@ async def ajouter_membre_salon(interaction: discord.Interaction, salon_id: int, 
         ephemeral=True
     )
 
+@tree.command(name="securisation", description="Active la sécurisation temporaire du serveur")
+@app_commands.describe(duree="Durée en minutes")
+async def securisation(interaction: discord.Interaction, duree: int):
+    global secure_mode
+    if secure_mode:
+        await interaction.response.send_message("Sécurisation déjà en cours", ephemeral=True)
+        return
+
+    secure_mode = True
+    locked_channels.clear()
+
+    for channel in interaction.guild.text_channels:
+        overwrite = channel.overwrites_for(interaction.guild.default_role)
+        if overwrite.send_messages is not False:
+            locked_channels[channel.id] = overwrite.send_messages
+            overwrite.send_messages = False
+            await channel.set_permissions(interaction.guild.default_role, overwrite=overwrite)
+            await channel.send("# Sécurisation\nIl est possible que le serveur subisse une cyberattaque. Par mesure de sécurité, toutes les actions sont limitées temporairement.")
+
+    await interaction.response.send_message(f"Serveur sécurisé pour {duree} minutes", ephemeral=True)
+
+    await asyncio.sleep(duree * 60)
+    await securisation_fin_auto(interaction.guild)
+
+@tree.command(name="securisation_fin", description="Désactive la sécurisation")
+async def securisation_fin(interaction: discord.Interaction):
+    await securisation_fin_auto(interaction.guild)
+    await interaction.response.send_message("Sécurisation désactivée", ephemeral=True)
+
+async def securisation_fin_auto(guild: discord.Guild):
+    global secure_mode
+    if not secure_mode:
+        return
+
+    for channel in guild.text_channels:
+        if channel.id in locked_channels:
+            overwrite = channel.overwrites_for(guild.default_role)
+            overwrite.send_messages = locked_channels[channel.id]
+            await channel.set_permissions(guild.default_role, overwrite=overwrite)
+            await channel.send("✅ Sécurisation terminée. Le serveur est de nouveau accessible.")
+
+    secure_mode = False
+    locked_channels.clear()
+
+@tree.command(name="maintenance", description="Active le mode maintenance")
+@app_commands.describe(duree="Durée en minutes", raison="Raison de la maintenance")
+async def maintenance(interaction: discord.Interaction, duree: int, raison: str):
+    for channel in interaction.guild.text_channels:
+        overwrite = channel.overwrites_for(interaction.guild.default_role)
+        overwrite.send_messages = False
+        await channel.set_permissions(interaction.guild.default_role, overwrite=overwrite)
+        await channel.send(f"# Maintenance\n🛠️ Le serveur est en maintenance pour {duree} minutes.\n**Raison :** {raison}")
+
+    await interaction.response.send_message(f"Maintenance activée pour {duree} minutes", ephemeral=True)
+    await asyncio.sleep(duree * 60)
+
+    for channel in interaction.guild.text_channels:
+        overwrite = channel.overwrites_for(interaction.guild.default_role)
+        overwrite.send_messages = True
+        await channel.set_permissions(interaction.guild.default_role, overwrite=overwrite)
+        await channel.send("✅ Fin de la maintenance. Merci de votre patience !")
 
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
