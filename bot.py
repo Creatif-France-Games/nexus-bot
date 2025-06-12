@@ -1,4 +1,4 @@
-# Créé par la Team CF Games avec l'aide de l'IA
+# Créé par Team CF Games et l'IA (GPT ou Gemini)
 # Sous license CC-BY, voir le fichier LICENSE
 # (c) Team CF Games 2025
 import discord
@@ -42,6 +42,7 @@ import quiz
 quiz.setup(bot)
 import mistralai
 mistralai.setup(bot)
+bot.load_extension("antiraid")
 # Configuration des IDs (à remplacer par vos vrais IDs)
 CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')  # Utilisez une variable d'environnement
 ROLE_NOTIFS_ID = os.getenv('ROLE_NOTIFS_ID')  # Utilisez une variable d'environnement
