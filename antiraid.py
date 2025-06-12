@@ -25,9 +25,9 @@ class AntiRaid(commands.Cog):
         self.msg_times[message.author.id] = [t for t in times if now - t < 20]
         self.msg_times[message.author.id].append(now)
 
-        # Check si le user envoie un message toutes les 0.8s
+        # Check si le user envoie un message toutes les 1s
         if len(self.msg_times[message.author.id]) >= 2:
-            if self.msg_times[message.author.id][-1] - self.msg_times[message.author.id][-2] < 0.8:
+            if self.msg_times[message.author.id][-1] - self.msg_times[message.author.id][-2] < 1:
                 try:
                     await message.delete()
                 except:
@@ -36,7 +36,7 @@ class AntiRaid(commands.Cog):
                 channel = self.bot.get_channel(self.security_channel_id)
                 if channel:
                     embed = discord.Embed(
-                        description="🔒 CF Games Bot à protégé ce serveur.\nUn bot/une profil à spammé les messages, ils ont été supprimés.",
+                        description="🔒 CF Games Bot à protégé ce serveur.\nUn bot/un profil à spammé les messages, ils ont été supprimés.",
                         color=0xFF0000
                     )
                     await channel.send(embed=embed)
