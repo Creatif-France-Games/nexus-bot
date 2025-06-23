@@ -879,6 +879,23 @@ async def maintenance(interaction: discord.Interaction, duree: int, raison: str)
         await channel.set_permissions(interaction.guild.default_role, overwrite=overwrite)
         await channel.send("✅ Fin de la maintenance. Merci de votre patience !")
 
+@bot.tree.command(name="nouvel_article", description="Annonce un nouvel article sur le site (réservé aux admins).")
+@app_commands.checks.has_permissions(administrator=True)
+async def nouvel_article(interaction: discord.Interaction):
+    await interaction.response.send_message(
+        "Un nouvel article est disponible sur [http://www.tech-tutos.netlify.app](http://www.tech-tutos.netlify.app)",
+        ephemeral=False
+    )
+
+# Gestion des erreurs pour les permissions
+@nouvel_article.error
+async def nouvel_article_error(interaction: discord.Interaction, error):
+    if isinstance(error, app_commands.MissingPermissions):
+        await interaction.response.send_message(
+            "❌ Vous devez être administrateur pour utiliser cette commande.",
+            ephemeral=True
+        )
+
 # Code déjà initialisé pour garder le bot actif via Flask
 keep_alive()
 
