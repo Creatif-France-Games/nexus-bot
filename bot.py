@@ -887,6 +887,19 @@ async def nouvel_article(interaction: discord.Interaction):
         ephemeral=False
     )
 
+@bot.tree.command(name="nouvel_article", description="Annonce un nouvel article sur le site (réservé aux admins).")
+@app_commands.describe(titre="Un titre facultatif pour l'annonce.")
+@app_commands.checks.has_permissions(administrator=True)
+async def nouvel_article(interaction: discord.Interaction, titre: str = None):
+    # Construire le message avec ou sans titre
+    if titre:
+        message = f"{titre}\nUn nouvel article est disponible sur [http://www.tech-tutos.netlify.app](http://www.tech-tutos.netlify.app)"
+    else:
+        message = "Un nouvel article est disponible sur [http://www.tech-tutos.netlify.app](http://www.tech-tutos.netlify.app)"
+    
+    # Envoyer le message
+    await interaction.response.send_message(message, ephemeral=False)
+
 # Gestion des erreurs pour les permissions
 @nouvel_article.error
 async def nouvel_article_error(interaction: discord.Interaction, error):
