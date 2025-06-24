@@ -1,11 +1,11 @@
-# CF Games Bot 🎮🤖
+# Nexus Bot 🎮🤖
 
-Bienvenue sur le CF Games Bot, ton compagnon idéal pour des commandes fun sur ton serveur Discord ! 🚀
+Bienvenue sur le Nexus Bot, ton compagnon idéal pour des commandes fun sur ton serveur Discord ! 🚀
 
 ## Installation rapide ⚡
 
 1. Clone ce dépôt avec la commande :  
-   `git clone https://github.com/Creatif-France-Games/cf-games-bot.git`
+   `git clone https://github.com/Team-CF-Games/nexus-bot.git`
    
 2. Installe les dépendances avec :  
    `pip install -r requirements.txt`
