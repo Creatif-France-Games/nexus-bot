@@ -102,7 +102,7 @@ async def on_message(message):
 
     content = message.content.lower()
 
-    salutations = ["salut", "bonjour", "coucou", "hi", "hola", "hello", "yo ", " yo", "bonsoir", "cc", "slt", "bjr"]
+    salutations = ["salut", "bonjour", "coucou", "hola", "hello", "bonsoir", "slt", "bjr"]
     depart = ["au revoir", "bye", "a+", "ciao", "see ya", "à bientôt", "adieu", "bonne nuit", "bn", "tchao"]
     faim = ["j'ai faim", "faim", "j’ai la dalle", "je crève de faim", "trop faim", "je crève la dalle"]
     quoifeur = ["quoi"]
@@ -123,10 +123,10 @@ async def on_message(message):
         await message.reply("Tiens une bonne assiette de pâtes carbonara :\nhttps://cdn.pixabay.com/photo/2011/04/29/11/20/spaghetti-7113_1280.jpg")
         return
     elif any(word in content for word in quoifeur):
-        await message.reply("Feur !")
+        await message.reply("Feur ! Hahahahaha très drôle nan ? ")
         return
     elif any(word in content for word in cava):
-        await message.reply("Moi je vait bien, comme toujours ! Et toi?")
+        await message.reply("Je ne peut aller ni mal ni bien, vu que je ne suis qu'un bot... Mais toi, ca va ?")
         return
     elif any(word in content for word in caca):
         embed = discord.Embed()
@@ -134,13 +134,13 @@ async def on_message(message):
         await message.reply(embed=embed)
         return
     elif any(word in content for word in rigole):
-        await message.reply("T'as l'air de bien rigoler 😄!")
+        await message.reply("Dommage que je ne puisse pas rire comme toi...")
         return
     elif any(word in content for word in musique):
-        await message.reply("Moi j'en connais une ! Never gonna give you up !")
+        await message.reply("Moi je connais une superbe chanson... Never gonna give you up, never gonna let you down, Never gonna run around and desert you, Never gonna make you cry, never gonna say goodbye Never gonna tell a lie and hurt you ! ")
         return
     elif any(word in content for word in triste):
-        await message.reply("Fait /blague pour te remonter le moral !")
+        await message.reply("Fait /blague pour te remonter le moral nan ?")
         return
     await bot.process_commands(message)
 
@@ -221,7 +221,7 @@ async def envoyer_news(interaction: discord.Interaction):
 async def envoyer_news_error(interaction: discord.Interaction, error):
     if isinstance(error, MissingPermissions):
         await interaction.response.send_message(
-            "Vous devez être administrateur pour utiliser cette commande.", ephemeral=True
+            "Vous devez être administrateur pour utiliser cette commande !", ephemeral=True
         )
 # embed des infos du bot
 @bot.tree.command(name="infobot", description="Affiche les informations du bot.")
