@@ -52,13 +52,11 @@ async def on_message(message):
     # Permet au bot de continuer à traiter les commandes
     await bot.process_commands(message)
     
-import debile
-debile.setup(bot)
-import quiz
-quiz.setup(bot)
-import mistralai
-mistralai.setup(bot)
-bot.load_extension("antiraid")
+bot.load_extension('debile')
+bot.load_extension('quiz')
+bot.load_extension('mistralai')
+bot.load_extension('antiraid')
+bot.load_extension('fuzzy_listener')
 # Configuration des IDs (à remplacer par vos vrais IDs)
 CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')  # Utilisez une variable d'environnement
 ROLE_NOTIFS_ID = os.getenv('ROLE_NOTIFS_ID')  # Utilisez une variable d'environnement
