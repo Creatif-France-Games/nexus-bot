@@ -35,6 +35,22 @@ tree = bot.tree
 async def on_ready():
     await bot.tree.sync()
     print(f'Connecté en tant que {bot.user} (commandes slash synchronisées)')
+
+@bot.event
+async def on_message(message):
+    # Vérifier si le bot est mentionné
+    if bot.user in message.mentions:
+        # Créer un embed bleu
+        embed = discord.Embed(
+            title="Je suis Nexus Bot",
+            description="Un bot open source par CF Games",
+            color=discord.Color.blue()
+        )
+        # Envoyer l'embed en réponse
+        await message.channel.send(embed=embed)
+
+    # Permet au bot de continuer à traiter les commandes
+    await bot.process_commands(message)
     
 import debile
 debile.setup(bot)
