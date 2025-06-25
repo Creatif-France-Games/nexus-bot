@@ -2,7 +2,6 @@ from discord.ext import commands
 import difflib
 
 def setup(bot: commands.Bot):
-
     command_phrases = {
         'de': [
             "lance un dé", "lancer un dé", "lance une de", "lance un de",
@@ -44,11 +43,13 @@ def setup(bot: commands.Bot):
 
     @bot.event
     async def on_message(message):
+        # Ignore les messages des bots
         if message.author.bot:
             return
 
         msg = message.content.lower()
 
+        # Recherche d'une commande similaire
         for command_name, phrases in command_phrases.items():
             for phrase in phrases:
                 ratio = difflib.SequenceMatcher(None, msg, phrase).ratio()
@@ -57,6 +58,9 @@ def setup(bot: commands.Bot):
                     command = bot.get_command(command_name)
                     if command:
                         await command.invoke(ctx)
-                        return
+                    else:
+                        print(f"Commande '{command_name}' non trouvée.")
+                    return  # Stop après la première commande trouvée
 
+        # Laisse la gestion aux commandes classiques si rien n'a été reconnu
         await bot.process_commands(message)
