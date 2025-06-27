@@ -15,6 +15,7 @@ from discord.app_commands import MissingPermissions
 from discord.ui import View, Button
 from server import keep_alive
 import youtube_dl  # Nécessaire pour gérer les streams audio
+from nexus_commands import setup_bot
 
 
 # Charger le token depuis le fichier .env
@@ -51,6 +52,10 @@ async def on_message(message):
 
     # Permet au bot de continuer à traiter les commandes
     await bot.process_commands(message)
+
+if __name__ == "__main__":
+    # Configurer le bot en appelant la fonction du module secondaire
+    bot = setup_bot()
     
 async def main():
     # Charge toutes tes extensions avec await
