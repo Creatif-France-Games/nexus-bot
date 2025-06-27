@@ -15,7 +15,7 @@ from discord.app_commands import MissingPermissions
 from discord.ui import View, Button
 from server import keep_alive
 import youtube_dl  # Nécessaire pour gérer les streams audio
-from detectio,_declenchement import setup_bot
+from detection_declenchement import setup_bot
 
 
 # Charger le token depuis le fichier .env
