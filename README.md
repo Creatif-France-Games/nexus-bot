@@ -5,7 +5,7 @@ Bienvenue sur le Nexus Bot, ton compagnon idéal pour des commandes fun sur ton 
 ## Installation rapide ⚡
 
 1. Clone ce dépôt avec la commande :  
-   `git clone https://github.com/Team-CF-Games/nexus-bot.git`
+   `git clone https://github.com/Creatif-France-Games/nexus-bot.git`
    
 2. Installe les dépendances avec :  
    `pip install -r requirements.txt`
@@ -20,11 +20,11 @@ Et voilà, ce bot est prêt à faire sa magie ! ✨
 
 ## Licence 📜
 
-Afin de respecter le travail des developpeurs participants à ce projet, j'ai choisi la license CC-BY qui nécessite une attribution. Consulte le [LICENSE](LICENSE) pour plus de détails.
+La license est dans le [LICENSE](https://github.com/Creatif-France-Games/nexus-bot/blob/main/LICENSE).
 
 ## Qui a fait ça ? 👨‍💻👩‍💻
 
-Créé par Team CF Games et ChatGPT, corrigé et amélioré avec amour.
+Crée par Lulu-76450 et ChatGPT.
 [SIte Web](https://cfgames.fr.nf/)
  
 # FAQ 
