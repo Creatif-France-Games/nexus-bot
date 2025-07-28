@@ -1,6 +1,6 @@
-# Créé par Team CF Games et l'IA (GPT ou Gemini)
+# Créé par Lulu-76450 et l'IA (GPT ou Gemini)
 # Sous license CC-BY, voir le fichier LICENSE
-# (c) Team CF Games 2025
+# (c) Lulu-76450 2025
 import discord
 from discord.ext import commands
 import random
@@ -44,7 +44,7 @@ async def on_message(message):
         # Créer un embed bleu
         embed = discord.Embed(
             title="Je suis Nexus Bot",
-            description="Un bot open source par CF Games",
+            description="Un bot open source par Lulu-76450",
             color=discord.Color.blue()
         )
         # Envoyer l'embed en réponse
@@ -251,13 +251,13 @@ async def infobot(interaction):
     creation_date = "16 avril 2025"
 
     embed = discord.Embed(
-        title="CF Games Bot",
-        description="Bot Discord Open-Source\n\nCode source : [GitHub Repository](https://github.com/Creatif-France-Games/cf-games-bot/)",
+        title="Nexus Bot",
+        description="Bot Discord Open-Source\n\nCode source : [GitHub Repository](https://github.com/Creatif-France-Games/nexus-bot/)",
         color=discord.Color.blue() 
     )
     embed.set_thumbnail(url=bot.user.avatar.url if bot.user.avatar else "")  # Ajoute l'avatar du bot (si dispo)
     embed.add_field(name="Date de création", value=creation_date, inline=False)
-    embed.set_footer(text="Merci d'utiliser CF Games Bot !")
+    embed.set_footer(text="Merci d'utiliser Nexus Bot !")
 
     # Envoi de l'embed
     await interaction.response.send_message(embed=embed)
