@@ -55,9 +55,9 @@ async def on_ready():
     # --- NOUVEAU: Chargement des extensions (cogs) ---
     # Ici, nous chargeons toutes vos extensions, y compris la nouvelle 'ia'.
     # Cela remplace la fonction main() qui n'était pas appelée.
-    extensions = ['debile', 'quiz', 'mistralai', 'antiraid', 'fuzzy_listener', 'ia']
+    extensions = ['debile', 'quiz', 'antiraid', 'fuzzy_listener', 'ia']
     for extension in extensions:
-        try:
+        try
             await bot.load_extension(extension)
             print(f'L\'extension "{extension}" a été chargée avec succès.')
         except Exception as e:
@@ -946,5 +946,6 @@ keep_alive()
 
 # Lancer le bot Discord
 bot.run(os.getenv('DISCORD_TOKEN'))
+
 
 
