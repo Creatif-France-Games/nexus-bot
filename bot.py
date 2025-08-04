@@ -49,6 +49,8 @@ async def on_ready():
     try:
         await bot.tree.sync()
         print(f"Commandes slash synchronisées. {len(bot.tree.get_commands())} commande(s) trouvée(s).")
+        print("N E X U S B O T - Le Nexus Bot  est en marche !")
+        print("N E X U S B O T - Développé par Lulu-76450, open-source sur GitHub")
     except Exception as e:
         print(f"Erreur lors de la synchronisation des commandes : {e}")
 
@@ -947,6 +949,7 @@ keep_alive()
 
 # Lancer le bot Discord
 bot.run(os.getenv('DISCORD_TOKEN'))
+
 
 
 
