@@ -43,12 +43,23 @@ tree = bot.tree
 # --- Événement de démarrage du bot ---
 @bot.event
 async def on_ready():
+    """
+    Cet événement est déclenché une fois que le bot est connecté à Discord.
+    Toute la configuration du démarrage se fait ici.
+    """
     print(f'Connecté en tant que {bot.user}')
 
-    # --- NOUVEAU: Chargement des extensions (cogs) ---
-    # Nous chargeons d'abord toutes les extensions pour que les commandes slash
-    # soient bien enregistrées avec le bot.
-    extensions = ['debile', 'quiz', 'mistralai', 'antiraid', 'fuzzy_listener', 'ia']
+    # Liste de toutes les extensions à charger
+    extensions = [
+        'debile',
+        'quiz',
+        'mistralai',
+        'antiraid',
+        'fuzzy_listener',
+        'ia' # L'extension que nous voulons
+    ]
+
+    # Charge toutes les extensions de manière asynchrone
     for extension in extensions:
         try:
             await bot.load_extension(extension)
@@ -56,9 +67,8 @@ async def on_ready():
         except Exception as e:
             print(f"Erreur lors du chargement de l'extension '{extension}': {e}")
     
-    # --- CHANGEMENT: Synchronisation des commandes après le chargement ---
-    # Maintenant que les cogs sont chargés, nous pouvons synchroniser toutes
-    # les commandes slash avec Discord.
+    # Synchronise toutes les commandes slash APRES que les extensions ont été chargées.
+    # Ceci est crucial pour que la commande /ia soit trouvée.
     try:
         await bot.tree.sync()
         print(f"Commandes slash synchronisées. {len(bot.tree.get_commands())} commande(s) trouvée(s).")
@@ -67,30 +77,22 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-    # Vérifier si le bot est mentionné
     if bot.user in message.mentions:
-        # Créer un embed bleu
         embed = discord.Embed(
             title="Je suis Nexus Bot",
             description="Un bot open source par Lulu-76450",
             color=discord.Color.blue()
         )
-        # Envoyer l'embed en réponse
         await message.channel.send(embed=embed)
 
-    # Permet au bot de continuer à traiter les commandes
     await bot.process_commands(message)
 
-# --- NOUVEAU: Gestionnaire d'erreurs pour les commandes de préfixe ---
-# Cette fonction permet de ne pas faire planter le bot si une commande de préfixe
-# (comme !ia) est utilisée alors qu'elle n'existe pas.
+# Gestionnaire d'erreurs global pour les commandes de préfixe.
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        # Ignore les erreurs de commandes non trouvées.
-        pass
+        pass # Ignore les erreurs de commandes non trouvées.
     else:
-        # Affiche les autres erreurs pour le débogage.
         print(f"Une erreur est survenue dans une commande : {error}")
 
 # Liste des compliments
@@ -98,7 +100,7 @@ COMPLIMENTS = [
     "{member.display_name}, tu es une personne incroyable ! 😄",
     "{member.display_name}, tu illumines la journée de tout le monde ! ✨",
     "{member.display_name}, tu as un sourire qui réchauffe le cœur ! 😊",
-    "{member.display_name}, tu es un rayon de soleil dans ce monde ! �",
+    "{member.display_name}, tu es un rayon de soleil dans ce monde ! 🌞",
     "{member.display_name}, tes idées sont toujours brillantes ! 💡",
     "{member.display_name}, tu as un grand cœur ! ❤️",
     "{member.display_name}, t'es vraiment une source d'inspiration ! 🌟",
@@ -106,7 +108,7 @@ COMPLIMENTS = [
     "{member.display.name}, t'es une personne vraiment cool et positive ! 😎"
 ]
 
-# --- Section de démarrage ---
+# Section de démarrage du bot
 if __name__ == "__main__":
     if DISCORD_BOT_TOKEN:
         bot.run(DISCORD_BOT_TOKEN)
@@ -961,6 +963,7 @@ keep_alive()
 
 # Lancer le bot Discord
 bot.run(os.getenv('DISCORD_TOKEN'))
+
 
 
 
