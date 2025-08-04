@@ -41,22 +41,13 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 tree = bot.tree
 
 # --- Événement de démarrage du bot ---
-# J'ai ajouté le chargement des extensions dans l'événement on_ready().
-# C'est la méthode recommandée pour s'assurer que le bot est prêt avant de charger les cogs.
 @bot.event
 async def on_ready():
-    print(f'Connecté en tant que {bot.user} (commandes slash synchronisées)')
-    try:
-        await bot.tree.sync()
-        print(f"Commandes slash synchronisées. {len(bot.tree.get_commands())} commande(s) trouvée(s).")
-        print("N E X U S B O T - Le Nexus Bot  est en marche !")
-        print("N E X U S B O T - Développé par Lulu-76450, open-source sur GitHub")
-    except Exception as e:
-        print(f"Erreur lors de la synchronisation des commandes : {e}")
+    print(f'Connecté en tant que {bot.user}')
 
     # --- NOUVEAU: Chargement des extensions (cogs) ---
-    # Ici, nous chargeons toutes vos extensions, y compris la nouvelle 'ia'.
-    # Cela remplace la fonction main() qui n'était pas appelée.
+    # Nous chargeons d'abord toutes les extensions pour que les commandes slash
+    # soient bien enregistrées avec le bot.
     extensions = ['debile', 'quiz', 'mistralai', 'antiraid', 'fuzzy_listener', 'ia']
     for extension in extensions:
         try:
@@ -64,7 +55,15 @@ async def on_ready():
             print(f'L\'extension "{extension}" a été chargée avec succès.')
         except Exception as e:
             print(f"Erreur lors du chargement de l'extension '{extension}': {e}")
-
+    
+    # --- CHANGEMENT: Synchronisation des commandes après le chargement ---
+    # Maintenant que les cogs sont chargés, nous pouvons synchroniser toutes
+    # les commandes slash avec Discord.
+    try:
+        await bot.tree.sync()
+        print(f"Commandes slash synchronisées. {len(bot.tree.get_commands())} commande(s) trouvée(s).")
+    except Exception as e:
+        print(f"Erreur lors de la synchronisation des commandes : {e}")
 
 @bot.event
 async def on_message(message):
@@ -86,11 +85,11 @@ async def on_message(message):
 COMPLIMENTS = [
     "{member.display_name}, tu es une personne incroyable ! 😄",
     "{member.display_name}, tu illumines la journée de tout le monde ! ✨",
-    "{member.display_name}, tu as un sourire qui réchauffe le cœur ! 😊",
+    "{member.display_name}, tu as un sourire qui réchauffe le cœur ! �",
     "{member.display_name}, tu es un rayon de soleil dans ce monde ! 🌞",
     "{member.display_name}, tes idées sont toujours brillantes ! 💡",
     "{member.display_name}, tu as un grand cœur ! ❤️",
-    "{member.display_name}, t'es vraiment une source d'inspiration ! �",
+    "{member.display_name}, t'es vraiment une source d'inspiration ! 🌟",
     "{member.display_name}, ton énergie est contagieuse ! ⚡",
     "{member.display_name}, t'es une personne vraiment cool et positive ! 😎"
 ]
@@ -949,6 +948,7 @@ keep_alive()
 
 # Lancer le bot Discord
 bot.run(os.getenv('DISCORD_TOKEN'))
+
 
 
 
