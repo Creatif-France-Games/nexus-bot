@@ -48,6 +48,8 @@ async def on_ready():
     Toute la configuration du démarrage se fait ici.
     """
     print(f'Connecté en tant que {bot.user}')
+    print(f'N E X U S B O T - Le Nexus Bot est en marche !')
+    print(f'N E X U S B O T - Crédits : développé par Lulu-76450, open-source sur GitHub')
 
     # Liste de toutes les extensions à charger
     extensions = [
@@ -63,17 +65,17 @@ async def on_ready():
     for extension in extensions:
         try:
             await bot.load_extension(extension)
-            print(f'L\'extension "{extension}" a été chargée avec succès.')
+            print(f'N E X U S B O T - L\'extension "{extension}" a été chargée avec succès.')
         except Exception as e:
-            print(f"Erreur lors du chargement de l'extension '{extension}': {e}")
+            print(f"N E X U S B O T - Erreur lors du chargement de l'extension '{extension}': {e}")
     
     # Synchronise toutes les commandes slash APRES que les extensions ont été chargées.
     # Ceci est crucial pour que la commande /ia soit trouvée.
     try:
         await bot.tree.sync()
-        print(f"Commandes slash synchronisées. {len(bot.tree.get_commands())} commande(s) trouvée(s).")
+        print(f"N E X U S B O T - Commandes slash synchronisées. {len(bot.tree.get_commands())} commande(s) trouvée(s).")
     except Exception as e:
-        print(f"Erreur lors de la synchronisation des commandes : {e}")
+        print(f"N E X U S B O T - Erreur lors de la synchronisation des commandes : {e}")
 
 @bot.event
 async def on_message(message):
@@ -93,7 +95,7 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         pass # Ignore les erreurs de commandes non trouvées.
     else:
-        print(f"Une erreur est survenue dans une commande : {error}")
+        print(f"N E X U S B O T - Une erreur est survenue dans une commande : {error}")
 
 # Liste des compliments
 COMPLIMENTS = [
@@ -113,7 +115,7 @@ if __name__ == "__main__":
     if DISCORD_BOT_TOKEN:
         bot.run(DISCORD_BOT_TOKEN)
     else:
-        print("Erreur: Le token Discord n'est pas défini. Veuillez le configurer dans le fichier .env.")
+        print("N E X U S B O T - Erreur: Le token Discord n'est pas défini. Veuillez le configurer dans le fichier .env.")
 
 # Commande Slash pour lancer un dé
 @bot.tree.command(name='de', description='Lance un dé avec un nombre de faces de ton choix.')
@@ -438,6 +440,7 @@ async def kick(interaction: discord.Interaction, membre: discord.Member, raison:
     
     # Répondre dans le canal
     await interaction.response.send_message(f"{membre.display_name} a été expulsé pour la raison suivante : {raison}")
+    
 @bot.tree.command(name="infoserveur", description="Affiche des informations détaillées sur le serveur.")
 async def infoserveur(interaction: discord.Interaction):
     # Récupérer les informations sur le serveur
@@ -963,6 +966,7 @@ keep_alive()
 
 # Lancer le bot Discord
 bot.run(os.getenv('DISCORD_TOKEN'))
+
 
 
 
