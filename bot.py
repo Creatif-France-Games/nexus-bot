@@ -26,16 +26,43 @@ user_private_channels = {}
 locked_channels = {}
 secure_mode = False
 
+# Configuration des IDs (à remplacer par vos vrais IDs)
+CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')
+ROLE_NOTIFS_ID = os.getenv('ROLE_NOTIFS_ID')
+# Récupérer le token du bot
+DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
+
+
 # Configuration des intents
 intents = discord.Intents.all()
 intents.message_content = True
 intents.members = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 tree = bot.tree
+
+# --- Événement de démarrage du bot ---
+# J'ai ajouté le chargement des extensions dans l'événement on_ready().
+# C'est la méthode recommandée pour s'assurer que le bot est prêt avant de charger les cogs.
 @bot.event
 async def on_ready():
-    await bot.tree.sync()
     print(f'Connecté en tant que {bot.user} (commandes slash synchronisées)')
+    try:
+        await bot.tree.sync()
+        print(f"Commandes slash synchronisées. {len(bot.tree.get_commands())} commande(s) trouvée(s).")
+    except Exception as e:
+        print(f"Erreur lors de la synchronisation des commandes : {e}")
+
+    # --- NOUVEAU: Chargement des extensions (cogs) ---
+    # Ici, nous chargeons toutes vos extensions, y compris la nouvelle 'ia'.
+    # Cela remplace la fonction main() qui n'était pas appelée.
+    extensions = ['debile', 'quiz', 'mistralai', 'antiraid', 'fuzzy_listener', 'ia']
+    for extension in extensions:
+        try:
+            await bot.load_extension(extension)
+            print(f'L\'extension "{extension}" a été chargée avec succès.')
+        except Exception as e:
+            print(f"Erreur lors du chargement de l'extension '{extension}': {e}")
+
 
 @bot.event
 async def on_message(message):
@@ -53,22 +80,6 @@ async def on_message(message):
     # Permet au bot de continuer à traiter les commandes
     await bot.process_commands(message)
 
-if __name__ == "__main__":
-    # Configurer le bot en appelant la fonction du module secondaire
-    bot = setup_bot()
-    
-async def main():
-    # Charge toutes tes extensions avec await
-    await bot.load_extension('debile')
-    await bot.load_extension('quiz')
-    await bot.load_extension('mistralai')
-    await bot.load_extension('antiraid')
-    await bot.load_extension('fuzzy_listener')
-# Configuration des IDs (à remplacer par vos vrais IDs)
-CHANNEL_ANNONCES_ID = os.getenv('CHANNEL_ANNONCES_ID')  # Utilisez une variable d'environnement
-ROLE_NOTIFS_ID = os.getenv('ROLE_NOTIFS_ID')  # Utilisez une variable d'environnement
-
-
 # Liste des compliments
 COMPLIMENTS = [
     "{member.display_name}, tu es une personne incroyable ! 😄",
@@ -77,11 +88,15 @@ COMPLIMENTS = [
     "{member.display_name}, tu es un rayon de soleil dans ce monde ! 🌞",
     "{member.display_name}, tes idées sont toujours brillantes ! 💡",
     "{member.display_name}, tu as un grand cœur ! ❤️",
-    "{member.display_name}, t'es vraiment une source d'inspiration ! 🌟",
+    "{member.display_name}, t'es vraiment une source d'inspiration ! �",
     "{member.display_name}, ton énergie est contagieuse ! ⚡",
     "{member.display_name}, t'es une personne vraiment cool et positive ! 😎"
 ]
-
+if __name__ == "__main__":
+    if DISCORD_BOT_TOKEN:
+        bot.run(DISCORD_BOT_TOKEN)
+    else:
+        print("Erreur: Le token Discord n'est pas défini. Veuillez le configurer dans le fichier .env.")
 
 # Commande Slash pour lancer un dé
 @bot.tree.command(name='de', description='Lance un dé avec un nombre de faces de ton choix.')
@@ -931,4 +946,5 @@ keep_alive()
 
 # Lancer le bot Discord
 bot.run(os.getenv('DISCORD_TOKEN'))
+
 
