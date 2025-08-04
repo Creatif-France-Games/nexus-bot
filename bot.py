@@ -81,19 +81,32 @@ async def on_message(message):
     # Permet au bot de continuer à traiter les commandes
     await bot.process_commands(message)
 
+# --- NOUVEAU: Gestionnaire d'erreurs pour les commandes de préfixe ---
+# Cette fonction permet de ne pas faire planter le bot si une commande de préfixe
+# (comme !ia) est utilisée alors qu'elle n'existe pas.
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        # Ignore les erreurs de commandes non trouvées.
+        pass
+    else:
+        # Affiche les autres erreurs pour le débogage.
+        print(f"Une erreur est survenue dans une commande : {error}")
+
 # Liste des compliments
 COMPLIMENTS = [
     "{member.display_name}, tu es une personne incroyable ! 😄",
     "{member.display_name}, tu illumines la journée de tout le monde ! ✨",
-    "{member.display_name}, tu as un sourire qui réchauffe le cœur ! �",
-    "{member.display_name}, tu es un rayon de soleil dans ce monde ! 🌞",
+    "{member.display_name}, tu as un sourire qui réchauffe le cœur ! 😊",
+    "{member.display_name}, tu es un rayon de soleil dans ce monde ! �",
     "{member.display_name}, tes idées sont toujours brillantes ! 💡",
     "{member.display_name}, tu as un grand cœur ! ❤️",
     "{member.display_name}, t'es vraiment une source d'inspiration ! 🌟",
     "{member.display_name}, ton énergie est contagieuse ! ⚡",
-    "{member.display_name}, t'es une personne vraiment cool et positive ! 😎"
+    "{member.display.name}, t'es une personne vraiment cool et positive ! 😎"
 ]
 
+# --- Section de démarrage ---
 if __name__ == "__main__":
     if DISCORD_BOT_TOKEN:
         bot.run(DISCORD_BOT_TOKEN)
@@ -948,6 +961,7 @@ keep_alive()
 
 # Lancer le bot Discord
 bot.run(os.getenv('DISCORD_TOKEN'))
+
 
 
 
