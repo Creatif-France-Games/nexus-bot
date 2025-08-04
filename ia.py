@@ -19,10 +19,7 @@ class IACog(commands.Cog):
         if not OPENROUTER_API_KEY:
             print("ATTENTION: La clé API OpenRouter n'est pas configurée.")
 
-    @discord.app_commands.command(name="ia", description="Discutez avec le modèle d'IA Horizon Beta")
-    @discord.app_commands.describe(
-        prompt="La question ou la requête à envoyer à l'IA"
-    )
+    @bot.tree.command(name='ia', description='Discutez avec l'IA Horizon Beta')
     async def ia_command(self, interaction: discord.Interaction, prompt: str):
         """
         Cette commande slash envoie une requête à l'API d'OpenRouter et renvoie la réponse.
