@@ -27,7 +27,7 @@ class AntiRaid(commands.Cog):
 
         # Check si le user envoie un message toutes les 1s
         if len(self.msg_times[message.author.id]) >= 2:
-            if self.msg_times[message.author.id][-1] - self.msg_times[message.author.id][-2] < 1:
+            if self.msg_times[message.author.id][-1] - self.msg_times[message.author.id][-2] < 2:
                 try:
                     await message.delete()
                 except:
