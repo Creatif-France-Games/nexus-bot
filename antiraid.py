@@ -36,7 +36,7 @@ class AntiRaid(commands.Cog):
                 channel = self.bot.get_channel(self.security_channel_id)
                 if channel:
                     embed = discord.Embed(
-                        description="🔒 CF Games Bot à protégé ce serveur.\nUn bot/un profil à spammé les messages, ils ont été supprimés.",
+                        description="🔒 Nexus Bot à protégé ce serveur.\nUn bot/un profil à spammé les messages, ils ont été supprimés.",
                         color=0xFF0000
                     )
                     await channel.send(embed=embed)
