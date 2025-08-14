@@ -6,7 +6,7 @@ import os
 # --- Configuration du Cog ---
 # La clé API et le modèle sont définis ici pour ce module.
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-MODEL_NAME = "openrouter/horizon-beta"
+MODEL_NAME = "openrouter/google/gemma-3n-e2b-it:free"
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 class IACog(commands.Cog):
