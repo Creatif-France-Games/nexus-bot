@@ -2,72 +2,95 @@ import discord
 from discord.ext import commands
 import aiohttp
 import os
+import io
 
 # --- Configuration du Cog ---
-# La clé API et le modèle sont définis ici pour ce module.
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-MODEL_NAME = "openrouter/google/gemma-3n-e2b-it:free"
+MODEL_NAME = "google/gemma-3n-e2b-it:free"  # Modèle mis à jour
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 class IACog(commands.Cog):
     """
-    Ce cog gère la commande slash /ia pour interagir avec OpenRouter.ai.
+    Cog pour la commande /ia qui interagit avec OpenRouter.ai
     """
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        # Assurez-vous que les clés sont définies
         if not OPENROUTER_API_KEY:
-            print("ATTENTION: La clé API OpenRouter n'est pas configurée.")
+            print("N E X U S B O T - ⚠️ ATTENTION : Clé API OpenRouter non configurée.")
 
-    @discord.app_commands.command(name="ia", description="Discutez avec l'IA Horizon Beta")
+    @discord.app_commands.command(name="ia", description="Discutez avec l'IA Gemma 3n E2B IT (Google, via OpenRouter)")
     @discord.app_commands.describe(
-        prompt="La question ou la requête à envoyer à l'IA"
+        prompt="La question ou requête à envoyer à l'IA"
     )
     async def ia_command(self, interaction: discord.Interaction, prompt: str):
         """
-        Cette commande slash envoie une requête à l'API d'OpenRouter et renvoie la réponse.
+        Envoie le prompt à OpenRouter et retourne la réponse.
         """
-        # Vérifie si la clé API est disponible avant de continuer
         if not OPENROUTER_API_KEY:
-            await interaction.response.send_message("❌ Erreur : La clé API OpenRouter n'est pas configurée sur le bot.", ephemeral=True)
+            await interaction.response.send_message(
+                "❌ Erreur : Clé API OpenRouter non configurée.",
+                ephemeral=True
+            )
             return
 
         await interaction.response.defer(thinking=True)
 
-        async with aiohttp.ClientSession(
-            headers={
-                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-                "HTTP-Referer": "Votre Application Discord",  # Remplacez par le nom de votre app
-                "Content-Type": "application/json"
-            }
-        ) as session:
-            payload = {
-                "model": MODEL_NAME,
-                "messages": [
-                    {"role": "user", "content": prompt}
-                ]
-            }
+        headers = {
+            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+            "HTTP-Referer": "https://github.com/Creatif-France-Games/nexus-bot",  # URL valide
+            "Content-Type": "application/json"
+        }
 
-            try:
+        payload = {
+            "model": MODEL_NAME,
+            "messages": [
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.7
+        }
+
+        try:
+            async with aiohttp.ClientSession(headers=headers) as session:
                 async with session.post(OPENROUTER_API_URL, json=payload) as response:
-                    response.raise_for_status()
+                    raw_text = await response.text()
+
+                    if response.status != 200:
+                        await interaction.followup.send(
+                            f"❌ Erreur API OpenRouter ({response.status}) :\n```\n{raw_text}\n```"
+                        )
+                        return
+
                     data = await response.json()
-                    
-                    if data and 'choices' in data and len(data['choices']) > 0:
-                        ai_response = data['choices'][0]['message']['content']
-                        await interaction.followup.send(f"**Question:** {prompt}\n\n**Réponse de l'IA:** {ai_response}")
-                    else:
-                        await interaction.followup.send("❌ Erreur : Je n'ai pas pu obtenir de réponse de l'IA.")
 
-            except aiohttp.ClientError as e:
-                await interaction.followup.send(f"❌ Erreur de connexion : {e}")
-            except Exception as e:
-                await interaction.followup.send(f"❌ Une erreur inattendue est survenue : {e}")
+            # Extraction sécurisée de la réponse IA
+            choice = data.get("choices", [{}])[0]
+            ai_response = (
+                choice.get("message", {}).get("content") or
+                choice.get("text") or
+                "❌ Aucune réponse reçue."
+            )
 
-# Cette fonction est obligatoire pour que le fichier soit un cog.
-# Elle est appelée par le bot principal pour charger ce module.
+            # Gestion si réponse trop longue pour Discord
+            if len(ai_response) > 1990:
+                file = discord.File(
+                    io.BytesIO(ai_response.encode("utf-8")),
+                    filename="reponse.txt"
+                )
+                await interaction.followup.send(
+                    content=f"**Question :** {prompt}\n\nRéponse trop longue, voir fichier ci-joint :",
+                    file=file
+                )
+            else:
+                await interaction.followup.send(
+                    f"**Question :** {prompt}\n\n**Réponse de l'IA :** {ai_response}"
+                )
+
+        except aiohttp.ClientError as e:
+            await interaction.followup.send(f"❌ Erreur de connexion : {e}")
+
+        except Exception as e:
+            await interaction.followup.send(f"❌ Erreur inattendue : {e}")
+
+# Fonction de setup du cog
 async def setup(bot: commands.Bot):
-    """
-    Ajoute le cog au bot.
-    """
     await bot.add_cog(IACog(bot))
