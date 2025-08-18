@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import aiohttp
 import os
+import io
 
 # --- Configuration du Cog ---
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
@@ -36,7 +37,7 @@ class IACog(commands.Cog):
 
         headers = {
             "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-            "HTTP-Referer": "https://github.com/Creatif-France-Games/nexus-bot",
+            "HTTP-Referer": "https://github.com/Creatif-France-Games/nexus-bot",  # URL valide
             "Content-Type": "application/json"
         }
 
@@ -69,15 +70,20 @@ class IACog(commands.Cog):
                 "❌ Aucune réponse reçue."
             )
 
-            # Découpage en messages si trop long pour Discord
-            max_length = 2000
-            messages = [ai_response[i:i+max_length] for i in range(0, len(ai_response), max_length)]
-
-            for idx, msg in enumerate(messages):
-                if idx == 0:
-                    await interaction.followup.send(f"**Question :** {prompt}\n\n**Réponse de l'IA :** {msg}")
-                else:
-                    await interaction.followup.send(msg)
+            # Gestion si réponse trop longue pour Discord
+            if len(ai_response) > 1990:
+                file = discord.File(
+                    io.BytesIO(ai_response.encode("utf-8")),
+                    filename="reponse.txt"
+                )
+                await interaction.followup.send(
+                    content=f"**Question :** {prompt}\n\nRéponse trop longue, voir fichier ci-joint :",
+                    file=file
+                )
+            else:
+                await interaction.followup.send(
+                    f"**Question :** {prompt}\n\n**Réponse de l'IA :** {ai_response}"
+                )
 
         except aiohttp.ClientError as e:
             await interaction.followup.send(f"❌ Erreur de connexion : {e}")
