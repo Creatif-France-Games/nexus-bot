@@ -11,3 +11,6 @@ venv/
 
 # Fichiers sensibles
 .env
+masked*
+
+
