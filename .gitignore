@@ -10,7 +10,4 @@ venv/
 *.log
 
 # Fichiers sensibles
-.env
 masked*
-
-
