@@ -671,10 +671,24 @@ async def infobot(interaction):
 
     embed = discord.Embed(
         title="Serveurs",
-        description="Veloria (Code d'invitation : X72KP62P)\n\Créatif France (Code d'invitation : 432IBSK4)",
+        description="Veloria (Code d'invitation : 3D5G9O1G)\n\Créatif France (Code d'invitation : 432IBSK4).",
         color=discord.Color.blue() 
     )
     embed.set_footer(text="Serveurs de CF Games")
+
+    # Envoi de l'embed
+    await interaction.response.send_message(embed=embed)
+
+        # embed des serveurs
+@bot.tree.command(name="pubcoolos", description="Affiche les serveurs MultiCraft de CF Games.")
+async def infobot(interaction):
+
+    embed = discord.Embed(
+        title="Cool OS",
+        description="Cool OS est un système d'exploitation par navigateur (https://www.cool-os.fr.nf), rejoignez le Discord directement depuis le site !",
+        color=discord.Color.blue() 
+    )
+    embed.set_footer(text="Cool OS")
 
     # Envoi de l'embed
     await interaction.response.send_message(embed=embed)
@@ -922,6 +936,7 @@ keep_alive()
 
 # Lancer le bot Discord
 bot.run(os.getenv('DISCORD_TOKEN'))
+
 
 
 
