@@ -129,10 +129,9 @@ class IACog(commands.Cog):
         await interaction.response.defer(thinking=True)    
   
         try:    
-            messages = [    
-                {"role": "system", "content": MINETEST_SYSTEM_PROMPT},    
-                {"role": "user", "content": description}    
-            ]    
+            messages = [
+    {"role": "user", "content": f"{MINETEST_SYSTEM_PROMPT}\n\n{description}"}
+]
             ai_response = await self._call_openrouter(messages)    
   
             # La commande attend en pratique du code ; on renvoie tel quel.    
