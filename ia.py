@@ -13,7 +13,8 @@ OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 # Prompt système pour la commande Minetest  
   
 MINETEST_SYSTEM_PROMPT = (  
-    "Génère le code du mod Minetest décrit ci joint. Ne donne rien d'autre, uniquement le code du mod"  
+    "Tu dois générer le code d’un mod Minetest complet et fonctionnel à partir de la description donnée.  
+Suis strictement ces instructions :Utilise uniquement l’API officielle de Minetest (minetest.register_*),Le code doit être compatible avec les versions récentes de Minetest,Le fichier principal doit s’appeler init.lua,ne crée pas de fonctions ou classes inutiles (comme on_load, create_command, etc.),Ne renvoie aucun texte explicatif ni commentaire hors du code,Ne formate pas la réponse en Markdown, renvoie uniquement le code brut,n'hésite pas a ajouter des commentaires pour expliquer ton code.Ton rôle : produire uniquement le contenu exact du mod."  
 )  
   
 class IACog(commands.Cog):  
