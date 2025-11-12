@@ -693,6 +693,33 @@ async def infobot(interaction):
     # Envoi de l'embed
     await interaction.response.send_message(embed=embed)
 
+# embed des serveurs
+@bot.tree.command(name="contact", description="Contacter l'administrateur.")
+async def infobot(interaction):
+
+    embed = discord.Embed(
+        title="Contact",
+        description="<#1329466441002647603>",
+        color=discord.Color.blue() 
+    )
+    embed.set_footer(text="Contact")
+
+    # Envoi de l'embed
+    await interaction.response.send_message(embed=embed)
+
+# embed des serveurs
+@bot.tree.command(name="reglement", description="Règlement du Serveur Discord CF Games.")
+async def infobot(interaction):
+
+    embed = discord.Embed(
+        title="Règlement",
+        description="<#1329100576830787614>",
+        color=discord.Color.blue() 
+    )
+    embed.set_footer(text="Règlement - CF Games")
+
+    # Envoi de l'embed
+    await interaction.response.send_message(embed=embed)
 @bot.tree.command(name="clear", description="Supprime des messages.")
 async def clear(interaction: discord.Interaction, amount: int):
     if not interaction.user.guild_permissions.manage_messages:
