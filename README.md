@@ -1,6 +1,12 @@
 # Nexus Bot 🎮🤖
 
-Bienvenue sur le Nexus Bot, ton compagnon idéal pour des commandes fun sur ton serveur Discord ! 🚀
+### ⚠️ Information
+> Le code ayant été fait en grande partie par une IA, il est probablement rempli de bugs.
+> Une partie du code est probablement inutile
+> Je ne rajoute que très rarement de nouvelles commandes
+
+
+Voicci Nexus Bot, ton compagnon idéal pour des commandes fun sur ton serveur Discord ! 🚀
 
 ## Installation rapide ⚡
 
